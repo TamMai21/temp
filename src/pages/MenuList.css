@@ -1,0 +1,54 @@
+.img-menu {
+    height: 30%;
+    width: 100%;
+}
+
+.menu-list {
+    height: 50%;
+    /* padding: 2% 0; */
+    position: relative;
+}
+
+.box {
+    border: 1px solid black;
+    padding: 2%;
+}
+
+.bg-yellow {
+    background-color: yellow;
+
+}
+
+.px {
+    padding: 2%;
+}
+
+.list {
+    /* position: absolute; */
+    /* top: 30%; */
+    /* margin: auto; */
+    /* width: 100%; */
+    background-color: white;
+}
+
+.img-item {
+    width: 100%;
+    height: auto;
+}
+
+.title-item {
+    text-align: left;
+}
+
+.title-item:hover {
+    cursor: pointer;
+    color: gray;
+}
+
+.content-item {
+    text-align: left;
+}
+
+.item {
+    padding: 2%;
+}
