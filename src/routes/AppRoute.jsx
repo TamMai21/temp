@@ -6,6 +6,7 @@ import Cart from '../pages/Cart'
 import Detail from '../pages/Detail'
 import Edit from '../pages/Edit'
 import AddTask from '../pages/AddTask'
+import NotFound from '../components/NotFound'
 
 const AppRoute = () => {
     return (
@@ -17,6 +18,7 @@ const AppRoute = () => {
                 <Route path='/task/:id' element={<Detail />} />
                 <Route path='/edit/:id' element={<Edit />} />
             </Route>
+            <Route path='*' element={<NotFound />} />
         </Routes>
     )
 }

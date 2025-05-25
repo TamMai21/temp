@@ -8,21 +8,22 @@ import ProductCard from '../components/ProductCard'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchTasks } from '../redux/slice/taskSlice'
+import useTask from '../custom/useTask'
 
 const MenuList = () => {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
-
-    // ✅ Lấy state từ Redux store
-    const { data, loading, error } = useSelector((state) => state.tasks)
+    const navigate = useNavigate();
+    const { tasks, loading, error, loadTasks } = useTask();
 
     useEffect(() => {
-        dispatch(fetchTasks())
-    }, [dispatch])
+        loadTasks();
+    }, [loadTasks]);
 
     const handleAddTask = () => {
-        navigate('/add')
-    }
+        navigate('/add');
+    };
+
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
 
     return (
         <div className='menu-list d-block'>
@@ -48,7 +49,7 @@ const MenuList = () => {
 
                 <div className="d-flex justify-content-between flex-column">
                     {
-                        data && data.length !== 0 && data.map((item, index) => (
+                        tasks && tasks.length !== 0 && tasks.map((item, index) => (
                             <ProductCard task={item} key={index} />
                         ))
                     }

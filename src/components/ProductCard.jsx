@@ -1,10 +1,14 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import '../pages/MenuList.css'
 import { useNavigate } from 'react-router-dom';
 
 const ProductCard = (props) => {
     let { task } = props;
     const navigate = useNavigate()
+    useEffect(() => {
+        console.log('task in the card: ', task);
+
+    }, [])
     return (
         <div className="card mb-3 shadow-sm">
             <div className="row g-0">

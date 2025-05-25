@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { addTask, fetchTasks } from '../redux/slice/taskSlice'
+import useTask from '../custom/useTask'
 
 const AddTask = () => {
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const { loading, error } = useSelector(state => state.tasks || {})
+    const navigate = useNavigate();
+    const { loading, error, createTask, loadTasks } = useTask();
 
     const [formData, setFormData] = useState({
         id: '',
@@ -14,127 +14,127 @@ const AddTask = () => {
         description: '',
         image: '',
         status: false
-    })
+    });
 
-    const [formErrors, setFormErrors] = useState({})
-    const [selectedFile, setSelectedFile] = useState(null)
-    const [imagePreview, setImagePreview] = useState('')
+    const [formErrors, setFormErrors] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target
+        const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value
-        }))
+        }));
 
         // Clear error when user starts typing
         if (formErrors[name]) {
             setFormErrors(prev => ({
                 ...prev,
                 [name]: ''
-            }))
+            }));
         }
-    }
+    };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0]
+        const file = e.target.files[0];
 
         if (file) {
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
             if (!allowedTypes.includes(file.type)) {
-                alert('Chỉ chấp nhận các file ảnh: JPG, JPEG, PNG, GIF, WEBP')
-                e.target.value = ''
-                return
+                alert('Chỉ chấp nhận các file ảnh: JPG, JPEG, PNG, GIF, WEBP');
+                e.target.value = '';
+                return;
             }
 
             // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024 // 5MB
+            const maxSize = 5 * 1024 * 1024; // 5MB
             if (file.size > maxSize) {
-                alert('Kích thước file không được vượt quá 5MB')
-                e.target.value = ''
-                return
+                alert('Kích thước file không được vượt quá 5MB');
+                e.target.value = '';
+                return;
             }
 
-            setSelectedFile(file)
+            setSelectedFile(file);
 
             // Create image path for saving to database
-            const imagePath = `img/${file.name}`
+            const imagePath = `img/${file.name}`;
             setFormData(prev => ({
                 ...prev,
                 image: imagePath
-            }))
+            }));
 
             // Create preview URL
-            const previewUrl = URL.createObjectURL(file)
-            setImagePreview(previewUrl)
+            const previewUrl = URL.createObjectURL(file);
+            setImagePreview(previewUrl);
         } else {
-            setSelectedFile(null)
-            setImagePreview('')
+            setSelectedFile(null);
+            setImagePreview('');
             setFormData(prev => ({
                 ...prev,
                 image: ''
-            }))
+            }));
         }
-    }
+    };
 
     const validateForm = () => {
-        const errors = {}
+        const errors = {};
 
         if (!formData.title.trim()) {
-            errors.title = 'Tiêu đề là bắt buộc'
+            errors.title = 'Tiêu đề là bắt buộc';
         } else if (formData.title.trim().length < 3) {
-            errors.title = 'Tiêu đề phải có ít nhất 3 ký tự'
+            errors.title = 'Tiêu đề phải có ít nhất 3 ký tự';
         }
 
         if (!formData.description.trim()) {
-            errors.description = 'Mô tả là bắt buộc'
+            errors.description = 'Mô tả là bắt buộc';
         } else if (formData.description.trim().length < 10) {
-            errors.description = 'Mô tả phải có ít nhất 10 ký tự'
+            errors.description = 'Mô tả phải có ít nhất 10 ký tự';
         }
 
-        setFormErrors(errors)
-        return Object.keys(errors).length === 0
-    }
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!validateForm()) {
-            return
+            return;
         }
 
         try {
-            let dataDB = await dispatch(fetchTasks()).unwrap()
+            let dataDB = await loadTasks().unwrap();
             const taskData = {
                 id: dataDB.length + 1 + "",
                 title: formData.title.trim(),
                 description: formData.description.trim(),
                 image: formData.image, // This will be '/img/filename.ext' format
                 status: formData.status
-            }
+            };
 
-            const result = await dispatch(addTask(taskData)).unwrap()
+            const result = await createTask(taskData).unwrap();
 
             // Clean up preview URL
             if (imagePreview) {
-                URL.revokeObjectURL(imagePreview)
+                URL.revokeObjectURL(imagePreview);
             }
 
             // Redirect to detail page of newly created task
-            navigate(`/task/${result.id}`)
+            navigate(`/task/${result.id}`);
         } catch (error) {
-            console.error('Error adding task:', error)
+            console.error('Error adding task:', error);
         }
-    }
+    };
 
     const handleCancel = () => {
         // Clean up preview URL
         if (imagePreview) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
-        navigate('/')
-    }
+        navigate('/');
+    };
 
     const handleReset = () => {
         setFormData({
@@ -142,40 +142,40 @@ const AddTask = () => {
             description: '',
             image: '',
             status: false
-        })
-        setFormErrors({})
-        setSelectedFile(null)
+        });
+        setFormErrors({});
+        setSelectedFile(null);
 
         // Clean up preview URL
         if (imagePreview) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
-        setImagePreview('')
+        setImagePreview('');
 
         // Reset file input
-        const fileInput = document.getElementById('image')
+        const fileInput = document.getElementById('image');
         if (fileInput) {
-            fileInput.value = ''
+            fileInput.value = '';
         }
-    }
+    };
 
     const removeImage = () => {
-        setSelectedFile(null)
+        setSelectedFile(null);
         setFormData(prev => ({
             ...prev,
             image: ''
-        }))
+        }));
 
         // Clean up preview URL
         if (imagePreview) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
-        setImagePreview('')
+        setImagePreview('');
 
         // Reset file input
-        const fileInput = document.getElementById('image')
+        const fileInput = document.getElementById('image');
         if (fileInput) {
-            fileInput.value = ''
+            fileInput.value = '';
         }
     }
 

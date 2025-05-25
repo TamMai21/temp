@@ -3,73 +3,78 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchTasks, completeTask, deleteTask } from '../redux/slice/taskSlice'
 import EditModal from './EditModal'
+import useTask from '../custom/useTask'
+import { toast } from 'react-toastify'
 
 const Detail = () => {
-    const { id } = useParams()
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
+    const { id } = useParams();
+    const navigate = useNavigate();
+    const { tasks, loading, error, findTaskById, loadTasks, markTaskComplete, removeTask } = useTask();
+    const task = findTaskById(id);
 
-    const { data = [], loading, error } = useSelector(state => state.tasks || {})
-    const task = data.find(t => t.id == id)
-
-    const [show, setShow] = useState(false)
-    const [taskIdEdit, setTaskIdEdit] = useState()
+    const [show, setShow] = useState(false);
+    const [taskIdEdit, setTaskIdEdit] = useState();
 
     useEffect(() => {
         // Luôn fetch tasks khi component mount để đảm bảo có data
-        if (data.length === 0) {
-            dispatch(fetchTasks())
+        if (tasks.length === 0) {
+            loadTasks();
         }
-    }, [dispatch, data.length])
+    }, [loadTasks, tasks.length]);
 
     const handleEdit = (id) => {
         if (task && task.id) {
             // navigate(`/edit/${task.id}`) //dùng cho route
-            setTaskIdEdit(id)
-            setShow(true)
+            setTaskIdEdit(id);
+            setShow(true);
         } else {
-            console.error('Task not found or invalid task ID')
+            console.error('Task not found or invalid task ID');
         }
-    }
+    };
 
-    const handleBack = () => { navigate(`/`) }
+    const handleBack = () => { navigate(`/`); };
 
     const handleComplete = async () => {
         if (!task || !task.id) {
-            console.error('Task not found')
-            return
+            console.error('Task not found');
+            toast.error('task not found')
+            return;
         }
 
         try {
             console.log('taskID complete: ', task.id);
 
-            let res = await dispatch(completeTask(task.id)).unwrap()
-            console.log('Task completed successfully ')
+            let res = await markTaskComplete(task.id);
+            toast.success('TASK COMPLETED')
+            navigate('/menu');
+            console.log('Task completed successfully ');
         } catch (error) {
-            console.error('Error completing task:', error)
+            console.error('Error completing task:', error);
         }
-    }
+    };
 
     const handleDelete = async () => {
         if (!task || !task.id) {
-            console.error('Task not found')
-            return
+            console.error('Task not found');
+            return;
         }
 
         if (window.confirm('Bạn có chắc chắn muốn xóa?')) {
             try {
-                await dispatch(deleteTask(task.id)).unwrap()
-                navigate('/')
-                console.log('Task deleted successfully')
+                await removeTask(task.id).unwrap();
+                toast.success('DELETED')
+                navigate('/');
+                console.log('Task deleted successfully');
             } catch (error) {
-                console.error('Error deleting task:', error)
+                console.error('Error deleting task:', error);
+                toast.error('ERROR')
             }
         }
-    }
+    };
 
-    if (loading) return <p>Loading...</p>
-    if (error) return <p>Error: {error}</p>
-    if (!task) return <p>Không tìm thấy công việc.</p>
+    if (loading) return <p>Loading...</p>;
+    if (error) return <p>Error: {error}</p>;
+    if (!task) return <p>Không tìm thấy công việc.</p>;
 
     return (
         <>

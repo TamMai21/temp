@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'https://67d6a512286fdac89bc28e08.mockapi.io/onck';          //json serrver
+const API_URL = 'http://localhost:3001/tasks';          //json serrver
 // https://67d6a512286fdac89bc28e08.mockapi.io/onck     //mock
 
 // Fetch all tasks

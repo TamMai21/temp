@@ -6,6 +6,7 @@ import Footer from './components/Footer'
 import AppRoute from './routes/AppRoute'
 import { Provider } from 'react-redux'
 import store from './redux/store/taskStore'
+import { ToastContainer } from 'react-toastify'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -16,6 +17,17 @@ function App() {
         <BrowserRouter>
 
           <AppRoute />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+          />
 
         </BrowserRouter>
       </Provider>

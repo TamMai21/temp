@@ -1,30 +1,29 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { fetchTasks, updateTask } from '../redux/slice/taskSlice'
+import useTask from '../custom/useTask';
 
 const EditModal = ({ show, onHide, taskId, onSuccess }) => {
-    const dispatch = useDispatch()
-
-    const { data = [], loading, error } = useSelector(state => state.tasks || {})
-    const task = data.find(t => t.id == taskId)
+    const { tasks, loading, error, editTask, loadTasks } = useTask();
+    const task = tasks.find(t => t.id == taskId);
 
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         image: '',
         status: false
-    })
+    });
 
-    const [formErrors, setFormErrors] = useState({})
-    const [selectedFile, setSelectedFile] = useState(null)
-    const [imagePreview, setImagePreview] = useState('')
-    const [keepCurrentImage, setKeepCurrentImage] = useState(true)
+    const [formErrors, setFormErrors] = useState({});
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState('');
+    const [keepCurrentImage, setKeepCurrentImage] = useState(true);
 
     useEffect(() => {
-        if (data.length === 0) {
-            dispatch(fetchTasks())
+        if (tasks.length === 0) {
+            loadTasks();
         }
-    }, [dispatch, data.length])
+    }, [loadTasks, tasks.length]);
 
     useEffect(() => {
         if (task && show) {
@@ -33,21 +32,21 @@ const EditModal = ({ show, onHide, taskId, onSuccess }) => {
                 description: task.description || '',
                 image: task.image || '',
                 status: task.status || false
-            })
+            });
             // Set preview for existing image
             if (task.image) {
-                setImagePreview(task.image)
-                setKeepCurrentImage(true)
+                setImagePreview(task.image);
+                setKeepCurrentImage(true);
             }
         }
-    }, [task, show])
+    }, [task, show]);
 
     // Reset form when modal is closed
     useEffect(() => {
         if (!show) {
             // Clean up preview URL if it's a blob URL
             if (imagePreview && imagePreview.startsWith('blob:')) {
-                URL.revokeObjectURL(imagePreview)
+                URL.revokeObjectURL(imagePreview);
             }
             // Reset form state
             setFormData({
@@ -55,112 +54,112 @@ const EditModal = ({ show, onHide, taskId, onSuccess }) => {
                 description: '',
                 image: '',
                 status: false
-            })
-            setFormErrors({})
-            setSelectedFile(null)
-            setImagePreview('')
-            setKeepCurrentImage(true)
+            });
+            setFormErrors({});
+            setSelectedFile(null);
+            setImagePreview('');
+            setKeepCurrentImage(true);
         }
-    }, [show])
+    }, [show]);
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target
+        const { name, value, type, checked } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: type === 'checkbox' ? checked : value
-        }))
+        }));
 
         // Clear error when user starts typing
         if (formErrors[name]) {
             setFormErrors(prev => ({
                 ...prev,
                 [name]: ''
-            }))
+            }));
         }
-    }
+    };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0]
+        const file = e.target.files[0];
 
         if (file) {
             // Validate file type
-            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp']
+            const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
             if (!allowedTypes.includes(file.type)) {
-                alert('Chỉ chấp nhận các file ảnh: JPG, JPEG, PNG, GIF, WEBP')
-                e.target.value = ''
-                return
+                alert('Chỉ chấp nhận các file ảnh: JPG, JPEG, PNG, GIF, WEBP');
+                e.target.value = '';
+                return;
             }
 
             // Validate file size (max 5MB)
-            const maxSize = 5 * 1024 * 1024 // 5MB
+            const maxSize = 5 * 1024 * 1024; // 5MB
             if (file.size > maxSize) {
-                alert('Kích thước file không được vượt quá 5MB')
-                e.target.value = ''
-                return
+                alert('Kích thước file không được vượt quá 5MB');
+                e.target.value = '';
+                return;
             }
 
-            setSelectedFile(file)
-            setKeepCurrentImage(false)
+            setSelectedFile(file);
+            setKeepCurrentImage(false);
 
             // Create image path for saving to database
-            const imagePath = `img/${file.name}`
+            const imagePath = `img/${file.name}`;
             setFormData(prev => ({
                 ...prev,
                 image: imagePath
-            }))
+            }));
 
             // Create preview URL
-            const previewUrl = URL.createObjectURL(file)
-            setImagePreview(previewUrl)
+            const previewUrl = URL.createObjectURL(file);
+            setImagePreview(previewUrl);
         } else {
-            setSelectedFile(null)
+            setSelectedFile(null);
             // If clearing file input, revert to original image if exists
             if (task && task.image) {
-                setKeepCurrentImage(true)
-                setImagePreview(task.image)
+                setKeepCurrentImage(true);
+                setImagePreview(task.image);
                 setFormData(prev => ({
                     ...prev,
                     image: task.image
-                }))
+                }));
             } else {
-                setImagePreview('')
+                setImagePreview('');
                 setFormData(prev => ({
                     ...prev,
                     image: ''
-                }))
+                }));
             }
         }
-    }
+    };
 
     const validateForm = () => {
-        const errors = {}
+        const errors = {};
 
         if (!formData.title.trim()) {
-            errors.title = 'Tiêu đề là bắt buộc'
+            errors.title = 'Tiêu đề là bắt buộc';
         } else if (formData.title.trim().length < 3) {
-            errors.title = 'Tiêu đề phải có ít nhất 3 ký tự'
+            errors.title = 'Tiêu đề phải có ít nhất 3 ký tự';
         }
 
         if (!formData.description.trim()) {
-            errors.description = 'Mô tả là bắt buộc'
+            errors.description = 'Mô tả là bắt buộc';
         } else if (formData.description.trim().length < 10) {
-            errors.description = 'Mô tả phải có ít nhất 10 ký tự'
+            errors.description = 'Mô tả phải có ít nhất 10 ký tự';
         }
 
-        setFormErrors(errors)
-        return Object.keys(errors).length === 0
-    }
+        setFormErrors(errors);
+        return Object.keys(errors).length === 0;
+    };
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         if (!validateForm()) {
-            return
+            return;
         }
 
         if (!task || !task.id) {
-            console.error('Task not found')
-            return
+            console.error('Task not found');
+            return;
         }
 
         try {
@@ -171,88 +170,85 @@ const EditModal = ({ show, onHide, taskId, onSuccess }) => {
                 image: formData.image,
                 status: formData.status,
                 updatedAt: new Date().toISOString()
-            }
+            };
 
-            await dispatch(updateTask({
-                id: task.id,
-                taskData: updatedTask
-            })).unwrap()
+            await editTask(task.id, updatedTask).unwrap();
 
             // Clean up preview URL if it's a blob URL
             if (imagePreview && imagePreview.startsWith('blob:')) {
-                URL.revokeObjectURL(imagePreview)
+                URL.revokeObjectURL(imagePreview);
             }
 
             // Call success callback and close modal
             if (onSuccess) {
-                onSuccess(updatedTask)
+                onSuccess(updatedTask);
             }
-            onHide()
+            onHide();
         } catch (error) {
-            console.error('Error updating task:', error)
+            console.error('Error updating task:', error);
         }
-    }
+    };
 
     const handleCancel = () => {
         // Clean up preview URL if it's a blob URL
         if (imagePreview && imagePreview.startsWith('blob:')) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
-        onHide()
-    }
+        onHide();
+    };
 
     const removeImage = () => {
-        setSelectedFile(null)
-        setKeepCurrentImage(false)
+        setSelectedFile(null);
+        setKeepCurrentImage(false);
         setFormData(prev => ({
             ...prev,
             image: ''
-        }))
+        }));
 
         // Clean up preview URL if it's a blob URL
         if (imagePreview && imagePreview.startsWith('blob:')) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
-        setImagePreview('')
+        setImagePreview('');
 
         // Reset file input
-        const fileInput = document.getElementById('image')
+        const fileInput = document.getElementById('image');
         if (fileInput) {
-            fileInput.value = ''
+            fileInput.value = '';
         }
-    }
+    };
 
     const resetToOriginalImage = () => {
-        setSelectedFile(null)
-        setKeepCurrentImage(true)
+        setSelectedFile(null);
+        setKeepCurrentImage(true);
 
         // Clean up current preview URL if it's a blob URL
         if (imagePreview && imagePreview.startsWith('blob:')) {
-            URL.revokeObjectURL(imagePreview)
+            URL.revokeObjectURL(imagePreview);
         }
 
         if (task && task.image) {
             setFormData(prev => ({
                 ...prev,
                 image: task.image
-            }))
-            setImagePreview(task.image)
+            }));
+            setImagePreview(task.image);
         } else {
             setFormData(prev => ({
                 ...prev,
                 image: ''
-            }))
-            setImagePreview('')
+            }));
+            setImagePreview('');
         }
 
         // Reset file input
-        const fileInput = document.getElementById('image')
+        const fileInput = document.getElementById('image');
         if (fileInput) {
-            fileInput.value = ''
+            fileInput.value = '';
         }
-    }
+    };
 
-    if (!show) return null
+    if (!show) return null;
 
     return (
         <>
