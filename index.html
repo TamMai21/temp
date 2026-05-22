@@ -65,7 +65,7 @@
         <h1 class="font-comfortaa text-3xl md:text-5xl font-bold tracking-tight">
             Trình Chẩn Đoán <span class="text-gradient">Khủng Hoảng Biện Chứng</span>
         </h1>
-        <p class="text-slate-400 mt-2 text-base md:text-lg">Đo lường mức độ khủng hoảng từ A đến Z bằng Hệ Thống Quy Luật Triết học Mác - Lênin</p>
+        <p class="text-slate-400 mt-2 text-base md:text-lg">Khám phá bản đồ tâm lý của bạn — từ Tier D đến Tier SS — qua lăng kính Triết học Mác - Lênin</p>
     </header>
 
     <main class="max-w-3xl w-full mx-auto bg-slate-900/85 backdrop-blur-xl rounded-[30px] shadow-2xl border border-white/10 p-6 md:p-10 flex-grow flex flex-col justify-center min-h-[500px]">
@@ -117,17 +117,17 @@
         <div id="screen-result" class="hidden space-y-6 custom-scrollbar overflow-y-auto max-h-[600px] pr-2">
             <div class="text-center space-y-2">
                 <div class="inline-block bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase mb-2">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Báo Cáo Chẩn Đoán Hoàn Tất
+                    <i class="fa-solid fa-circle-check mr-1"></i> Phân Tích Tâm Lý Hoàn Tất
                 </div>
-                <h2 class="font-comfortaa text-2xl md:text-3xl font-bold text-white">Kết Quả Phân Tích Biện Chứng</h2>
+                <h2 class="font-comfortaa text-2xl md:text-3xl font-bold text-white">Kết Quả Của Bạn</h2>
             </div>
 
             <!-- Dialectical Crisis Score Badge -->
             <div class="bg-gradient-to-r from-slate-800 to-slate-900 border border-white/5 rounded-2xl p-6 text-center space-y-2 relative overflow-hidden">
                 <div class="absolute -right-8 -top-8 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"></div>
-                <div class="text-sm text-slate-400 uppercase tracking-widest font-semibold">Chỉ số Khủng hoảng của bạn:</div>
+                <div class="text-sm text-slate-400 uppercase tracking-widest font-semibold">Xếp Hạng Bản Lĩnh Của Bạn:</div>
                 <div id="result-crisis-level" class="text-4xl md:text-5xl font-black font-comfortaa text-gradient">
-                    CẤP ĐỘ Z
+                    TIER D
                 </div>
                 <div id="result-crisis-title" class="text-lg font-bold text-slate-200">
                     <!-- Crisis Title -->
@@ -139,8 +139,8 @@
                 <!-- Law & Philosophy Box -->
                 <div class="bg-purple-950/20 border border-purple-500/20 rounded-2xl p-5 space-y-3">
                     <div class="flex items-center space-x-2 text-purple-400 font-bold text-xs uppercase tracking-wider">
-                        <i class="fa-solid fa-scroll"></i>
-                        <span>Nguyên Lý Quy Luật Chi Phối</span>
+                        <i class="fa-solid fa-brain"></i>
+                        <span>Góc Nhìn Biện Chứng</span>
                     </div>
                     <h4 id="result-law-title" class="font-comfortaa text-lg font-bold text-purple-300">
                         <!-- Law Title -->
@@ -154,7 +154,7 @@
                 <div class="bg-orange-950/20 border border-orange-500/20 rounded-2xl p-5 space-y-3">
                     <div class="flex items-center space-x-2 text-orange-400 font-bold text-xs uppercase tracking-wider">
                         <i class="fa-solid fa-heart-pulse"></i>
-                        <span>Bệnh Án Tâm Lý Thực Tế</span>
+                        <span>Chân Dung Tâm Lý Của Bạn</span>
                     </div>
                     <h4 id="result-status-title" class="font-comfortaa text-lg font-bold text-orange-300">
                         <!-- Status Title -->
@@ -168,8 +168,8 @@
             <!-- Prescription Box -->
             <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-6 space-y-4">
                 <div class="flex items-center space-x-2 text-emerald-400 font-bold text-lg font-comfortaa">
-                    <i class="fa-solid fa-receipt"></i>
-                    <span>Toa Thuốc Điều Trị Biện Chứng (Giải Pháp)</span>
+                    <i class="fa-solid fa-hand-holding-heart"></i>
+                    <span>Gợi Ý Chăm Sóc & Phát Triển</span>
                 </div>
                 <ul id="result-prescription" class="space-y-3 text-sm text-slate-300 list-none pl-0">
                     <!-- Prescription items will be injected -->
@@ -191,7 +191,7 @@
     </footer>
 
     <script>
-        // Database of 6 detailed academic & engaging questions
+        // Database of 6 detailed academic & engaging questions — 4 options each (0–3 pts), max 18 pts
         const quizData = [
             {
                 id: 1,
@@ -200,14 +200,24 @@
                 question: "Để chuẩn bị hành trang đi làm, bạn đã đầu tư tích lũy kiến thức chuyên môn và trải nghiệm thực tiễn ra sao?",
                 options: [
                     {
-                        text: "A. Chỉ học để đối phó thi cử, rảnh là nằm lướt TikTok/Chơi game. Nghĩ rằng tấm bằng đại học là tấm vé vàng tự động có việc tốt.",
+                        text: "A. Chỉ học để đối phó thi cử, rảnh là nằm lướt TikTok/chơi game. Nghĩ rằng tấm bằng đại học là tấm vé vàng tự động có việc tốt.",
                         points: 0,
-                        feedback: "Bạn đang thiếu hụt nghiêm trọng về Lượng. Chưa tích lũy đủ Lượng thì không bao giờ có thể tự tạo ra Bước nhảy về Chất!"
+                        feedback: "Báo động đỏ! Bạn đang thiếu hụt nghiêm trọng về Lượng. Chưa tích lũy đủ Lượng thì không bao giờ có thể tự tạo ra Bước nhảy về Chất!"
                     },
                     {
-                        text: "B. Chăm học, chủ động đi làm thêm các công việc liên quan, học thêm ngoại ngữ/tin học và sửa đổi CV liên tục qua các lần bị từ chối.",
+                        text: "B. Có học bài nhưng chưa thực hành, thỉnh thoảng đi làm thêm nhưng không liên quan chuyên môn. Vẫn chưa nghĩ đến việc xây dựng CV hay kỹ năng bổ trợ.",
                         points: 1,
-                        feedback: "Chính xác! Bạn đang tích lũy Lượng rất tốt. Điểm nút và Bước nhảy đổi Chất chỉ là vấn đề thời gian."
+                        feedback: "Bạn có ý thức nhưng Lượng tích lũy còn quá mỏng. Bằng cấp không chuyên môn thực chiến thì rất khó tạo ra Bước nhảy về Chất ở thị trường lao động hiện nay."
+                    },
+                    {
+                        text: "C. Học đầy đủ, có làm thêm vài công việc liên quan, biết sơ về ngoại ngữ nhưng chưa chủ động xây dựng portfolio hay tìm mentor trong ngành.",
+                        points: 2,
+                        feedback: "Tốt! Bạn đang tích lũy Lượng đúng hướng. Chỉ cần thêm một bước đệm thực tiễn sâu hơn là Điểm nút đổi Chất sẽ đến."
+                    },
+                    {
+                        text: "D. Chăm học, chủ động đi làm thêm các công việc liên quan, học thêm ngoại ngữ/tin học và sửa đổi CV liên tục qua các lần bị từ chối.",
+                        points: 3,
+                        feedback: "Xuất sắc! Bạn đang tích lũy Lượng một cách có hệ thống. Điểm nút và Bước nhảy đổi Chất chỉ là vấn đề thời gian."
                     }
                 ]
             },
@@ -220,11 +230,21 @@
                     {
                         text: "A. Quá stress! Lên Threads đăng bài bóc phốt ẩn danh rồi viết đơn xin nghỉ việc ngay lập tức không lý do.",
                         points: 0,
-                        feedback: "Bạn chọn trốn tránh mâu thuẫn. Nhớ rằng: Sự đấu tranh giữa các mặt đối lập mới là động lực thúc đẩy sự phát triển."
+                        feedback: "Bạn chọn trốn tránh mâu thuẫn hoàn toàn. Nhớ rằng: Sự đấu tranh giữa các mặt đối lập mới là động lực thúc đẩy sự phát triển — trốn chạy chỉ khiến bạn giậm chân tại chỗ."
                     },
                     {
-                        text: "B. Khóc một chút rồi lau nước mắt, cố gắng học cách xử lý của người giỏi, tìm kiếm tiếng nói chung hoặc chứng minh năng lực để sếp nể phục.",
+                        text: "B. Im lặng chịu đựng trong ấm ức, làm việc cầm chừng và bắt đầu tính chuyện nghỉ việc sau vài tuần mà không nói chuyện với ai.",
                         points: 1,
+                        feedback: "Bạn đang 'triệt tiêu' mâu thuẫn bằng cách kìm nén. Mâu thuẫn không được giải quyết sẽ tích tụ và bùng phát mạnh hơn về sau."
+                    },
+                    {
+                        text: "C. Cố gắng chịu đựng, hay than thở với bạn bè, tìm cách né tránh sếp. Chưa dám đối diện trực tiếp nhưng cũng không bỏ cuộc.",
+                        points: 2,
+                        feedback: "Bạn không trốn chạy hoàn toàn nhưng chưa biết cách chuyển mâu thuẫn thành động lực. Hãy tiến thêm một bước: đối thoại trực tiếp để tìm ra tiếng nói chung."
+                    },
+                    {
+                        text: "D. Khóc một chút rồi lau nước mắt, cố gắng học cách xử lý của người giỏi, tìm kiếm tiếng nói chung hoặc chứng minh năng lực để sếp nể phục.",
+                        points: 3,
                         feedback: "Bản lĩnh xuất sắc! Giải quyết mâu thuẫn chính là hạt nhân giúp nâng tầm đẳng cấp tư duy công sở của bạn."
                     }
                 ]
@@ -238,12 +258,22 @@
                     {
                         text: "A. Chỉ muốn thời gian quay lại, tiếc nuối tuổi trẻ học đường và nghĩ cuộc sống đi làm hiện tại hoàn toàn là một bước lùi tồi tệ.",
                         points: 0,
-                        feedback: "Bạn đang hoài niệm quá khứ và sợ hãi sự Phủ định. Sự phát triển bắt buộc phải phủ định cái cũ để mở ra cái mới tiến bộ hơn."
+                        feedback: "Bạn đang hoài niệm quá khứ và sợ hãi sự Phủ định. Sự phát triển bắt buộc phải phủ định cái cũ để mở ra cái mới tiến bộ hơn — không có thụt lùi nào là mãi mãi."
                     },
                     {
-                        text: "B. Hiểu rằng dù mệt mỏi nhưng mình đã biết kiếm tiền, tự lập và hiểu đời hơn. Mình vẫn là mình nhưng ở phiên bản trưởng thành hơn.",
+                        text: "B. Thỉnh thoảng tiếc sinh viên, hay so sánh cuộc sống hiện tại với quá khứ hơn là nhìn về tương lai. Chấp nhận đi làm nhưng chưa thực sự thích nghi.",
                         points: 1,
-                        feedback: "Tuyệt hảo! Bạn đang phát triển đúng theo hình Đường xoắn ốc của quy luật phủ định của phủ định."
+                        feedback: "Bạn biết mình cần tiến lên nhưng tâm lý vẫn còn neo đậu ở quá khứ. Đây là trạng thái lưng chừng — không lùi hẳn nhưng cũng chưa bước tới được."
+                    },
+                    {
+                        text: "C. Chấp nhận cuộc sống đi làm, thỉnh thoảng nhớ thời sinh viên nhưng không để hoài niệm cản trở. Dần dần thấy bản thân trưởng thành hơn.",
+                        points: 2,
+                        feedback: "Khá tốt! Bạn đang chấp nhận sự Phủ định. Chỉ cần ý thức rõ hơn về những tiến bộ mình đã đạt được để tăng thêm động lực."
+                    },
+                    {
+                        text: "D. Hiểu rằng dù mệt mỏi nhưng mình đã biết kiếm tiền, tự lập và hiểu đời hơn. Mình vẫn là mình nhưng ở phiên bản trưởng thành hơn, không phải bước lùi.",
+                        points: 3,
+                        feedback: "Tuyệt hảo! Bạn đang phát triển đúng theo hình Đường xoắn ốc của quy luật phủ định của phủ định — tiến lên một vòng cao hơn nhưng vẫn là chính mình."
                     }
                 ]
             },
@@ -256,12 +286,22 @@
                     {
                         text: "A. Nghi ngờ bản thân vô dụng, trầm cảm, quyết định nằm nhà ăn bám gia đình và đổ lỗi cho kinh tế suy thoái.",
                         points: 0,
-                        feedback: "Bạn chưa hiểu về khái niệm Điểm nút. Lượng từ chối hiện tại chính là chỉ số cho thấy bạn cần bồi đắp thêm kỹ năng gì đó để vượt ngưỡng."
+                        feedback: "Bạn chưa hiểu về khái niệm Điểm nút. Lượng từ chối hiện tại chính là chỉ số cho thấy bạn cần bồi đắp thêm kỹ năng để vượt ngưỡng — không phải lý do để bỏ cuộc."
                     },
                     {
-                        text: "B. Nhìn nhận lại CV, phân tích yêu cầu tuyển dụng xem mình thiếu hụt chứng chỉ gì, chủ động kết nối để xin feedback và cải thiện kỹ năng.",
+                        text: "B. Buồn bã kéo dài, tiếp tục rải CV nhưng không sửa lại nội dung. Nghĩ rằng nếu rải nhiều hơn thì may mắn sẽ đến.",
                         points: 1,
-                        feedback: "Rất khoa học! Bạn hiểu rằng mỗi lần bị từ chối là một đơn vị Lượng đang tích tụ, chuẩn bị cho Điểm nút bùng nổ."
+                        feedback: "Tích lũy Lượng nhưng không có chất lượng cũng không tạo ra Bước nhảy. Làm cùng một thứ mà mong kết quả khác nhau — đó là tư duy cần thay đổi."
+                    },
+                    {
+                        text: "C. Nhìn lại CV, sửa một vài điểm nhỏ, hỏi thăm bạn bè xem mình thiếu gì. Tiếp tục nộp đơn nhưng chưa thực sự phân tích sâu yêu cầu tuyển dụng.",
+                        points: 2,
+                        feedback: "Bạn đang đi đúng hướng! Nhưng cần đào sâu hơn: phân tích kỹ từng JD, xin feedback từ HR để tối ưu hơn nữa."
+                    },
+                    {
+                        text: "D. Nhìn nhận lại CV, phân tích yêu cầu tuyển dụng xem mình thiếu hụt chứng chỉ gì, chủ động kết nối để xin feedback và cải thiện kỹ năng có hệ thống.",
+                        points: 3,
+                        feedback: "Rất khoa học! Bạn hiểu rằng mỗi lần bị từ chối là một đơn vị Lượng đang tích tụ, chuẩn bị cho Điểm nút bùng nổ tạo Bước nhảy về Chất."
                     }
                 ]
             },
@@ -274,12 +314,22 @@
                     {
                         text: "A. Im lặng chịu đựng ấm ức, sau đó nghỉ việc trong im lặng (Quiet Quitting) hoặc tỏ thái độ hằn học ra mặt làm hỏng không khí làm việc.",
                         points: 0,
-                        feedback: "Bạn đang chọn giải pháp triệt tiêu mâu thuẫn một cách cực đoan, biến xung đột lành mạnh thành mâu thuẫn tàn phá tinh thần của chính mình."
+                        feedback: "Bạn đang chọn cực đoan hóa mâu thuẫn, biến xung đột lành mạnh thành mâu thuẫn tàn phá tinh thần của chính mình. Không ai được lợi từ cách này."
                     },
                     {
-                        text: "B. Thu thập bằng chứng làm việc (email, bản nháp), hẹn gặp sếp và đồng nghiệp đó nói chuyện thẳng thắn, rõ ràng dựa trên số liệu thực tế.",
+                        text: "B. Than vãn với đồng nghiệp khác sau lưng người đó, nói xấu hoặc chia bè phái. Cảm thấy hả hê tạm thời nhưng không giải quyết được vấn đề gốc rễ.",
                         points: 1,
-                        feedback: "Quá thông minh! Bạn biết cách giải quyết mâu thuẫn bằng con đường đấu tranh biện chứng văn minh, mang lại sự công bằng."
+                        feedback: "Bạn đang giải quyết mâu thuẫn theo kiểu 'đường vòng' và thiếu văn minh. Điều này sẽ biến bạn thành người tạo ra mâu thuẫn mới, không phải người giải quyết nó."
+                    },
+                    {
+                        text: "C. Nói chuyện riêng với đồng nghiệp đó để làm rõ, nhưng không chuẩn bị bằng chứng nên dễ bị phủ nhận. Sự việc vẫn chưa được giải quyết triệt để.",
+                        points: 2,
+                        feedback: "Bạn dũng cảm đối diện mâu thuẫn — đó là điều tốt! Nhưng thiếu bằng chứng là điểm yếu chí mạng. Lần sau hãy chuẩn bị dữ liệu trước khi đối thoại."
+                    },
+                    {
+                        text: "D. Thu thập bằng chứng làm việc (email, bản nháp), hẹn gặp sếp và đồng nghiệp đó nói chuyện thẳng thắn, rõ ràng dựa trên số liệu thực tế.",
+                        points: 3,
+                        feedback: "Quá thông minh! Bạn biết cách giải quyết mâu thuẫn bằng con đường đấu tranh biện chứng văn minh — có bằng chứng, có đối thoại, mang lại sự công bằng thực sự."
                     }
                 ]
             },
@@ -290,14 +340,24 @@
                 question: "Bạn muốn thay đổi hoàn toàn định hướng công việc (ví dụ chuyển từ sư phạm sang làm Marketing kỹ thuật số) sau 1 năm thất bại.",
                 options: [
                     {
-                        text: "A. Coi 4 năm học đại học sư phạm trước đó là hoàn toàn vô ích và bỏ đi hết, bắt đầu lại từ con số không với tâm lý oán hận.",
+                        text: "A. Coi 4 năm học đại học sư phạm trước đó là hoàn toàn vô ích và bỏ đi hết, bắt đầu lại từ con số không với tâm lý oán hận và tự ti.",
                         points: 0,
-                        feedback: "Bạn đang phủ định sạch trơn (phủ định siêu hình). Hãy nhớ phủ định biện chứng luôn mang tính kế thừa, giữ lại tinh hoa cũ."
+                        feedback: "Bạn đang 'phủ định siêu hình' — xóa sạch quá khứ, không có kế thừa. Đây là sai lầm lớn nhất: bạn không chỉ mất thời gian 4 năm mà còn mất đi kho kinh nghiệm quý báu."
                     },
                     {
-                        text: "B. Kế thừa kỹ năng đứng lớp, soạn giáo án để áp dụng vào việc làm Content Creator/Marketing đào tạo. Biến chuyên môn cũ thành bệ phóng cho nghề mới.",
+                        text: "B. Không muốn nhắc đến ngành cũ, bắt đầu lại hoàn toàn từ đầu và thỉnh thoảng hối tiếc về khoảng thời gian 'lãng phí' trước đó.",
                         points: 1,
-                        feedback: "Đỉnh cao kế thừa biện chứng! Sự phát triển luôn giữ lại những giá trị cốt lõi của giai đoạn trước."
+                        feedback: "Bạn đang bỏ lỡ cơ hội kế thừa. Phủ định biện chứng không có nghĩa là xóa sổ — mà là giữ lại tinh hoa của cái cũ để làm bệ phóng cho cái mới."
+                    },
+                    {
+                        text: "C. Nhận ra có một số kỹ năng từ ngành cũ có thể dùng lại, nhưng chưa biết cách liên kết hai lĩnh vực một cách cụ thể và có chiến lược.",
+                        points: 2,
+                        feedback: "Tư duy tốt! Bạn đã nhìn thấy giá trị kế thừa. Bước tiếp theo là lên kế hoạch cụ thể để chuyển hóa kỹ năng cũ thành lợi thế cạnh tranh ở nghề mới."
+                    },
+                    {
+                        text: "D. Kế thừa kỹ năng đứng lớp và soạn giáo án để áp dụng vào Content Creator/Marketing đào tạo. Biến chuyên môn cũ thành bệ phóng cho nghề mới một cách có chiến lược.",
+                        points: 3,
+                        feedback: "Đỉnh cao kế thừa biện chứng! Sự phát triển luôn giữ lại những giá trị cốt lõi của giai đoạn trước và phát triển chúng lên tầm cao mới."
                     }
                 ]
             }
@@ -316,20 +376,17 @@
 
         function showQuestion() {
             const currentQuestion = quizData[currentQuestionIndex];
-            
-            // Set counter and progress
+
             document.getElementById('question-counter').innerText = `CÂU HỎI ${currentQuestionIndex + 1}/${quizData.length}`;
             document.getElementById('question-law-badge').innerText = currentQuestion.lawBadge;
             const progressPercent = ((currentQuestionIndex + 1) / quizData.length) * 100;
             document.getElementById('progress-bar').style.width = `${progressPercent}%`;
 
-            // Set text
             document.getElementById('question-text').innerText = currentQuestion.question;
 
-            // Generate options
             const optionsContainer = document.getElementById('options-container');
             optionsContainer.innerHTML = '';
-            
+
             currentQuestion.options.forEach((opt) => {
                 const button = document.createElement('button');
                 button.className = "w-full text-left bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:border-purple-500/50 p-5 rounded-2xl font-semibold text-slate-200 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex justify-between items-center group shadow-md";
@@ -345,7 +402,7 @@
         function selectOption(points, feedback) {
             score += points;
             currentQuestionIndex++;
-            
+
             if (currentQuestionIndex < quizData.length) {
                 showQuestion();
             } else {
@@ -353,6 +410,8 @@
             }
         }
 
+        // Max score = 18 (6 câu × 3 điểm/câu)
+        // Xếp hạng: D (0–2) → C (3–5) → B (6–8) → A (9–11) → S (12–14) → SS (15–18)
         function showResult() {
             document.getElementById('screen-quiz').classList.add('hidden');
             document.getElementById('screen-result').classList.remove('hidden');
@@ -365,57 +424,89 @@
             let statusDesc = "";
             let prescriptions = [];
 
-            // A-Z Crisis scale mapping based on total points
-            if (score <= 1) {
-                // Point 0 or 1
-                level = "CẤP ĐỘ Z (Khủng hoảng cực đại)";
-                crisisTitle = "Hội chứng 'Vô tri Biện chứng' & Trốn chạy thực tại";
-                lawTitle = "Sự bế tắc của các Quy luật Vận động";
-                lawDesc = "Lượng rỗng tuếch nhưng ham muốn Chất đổi đời. Tránh né đấu tranh mâu thuẫn để tìm kiếm sự an nhàn ảo tưởng. Phủ định sạch trơn quá khứ mà không kế thừa tiến bộ.";
-                statusTitle = "Tâm hồn thủy tinh dễ vỡ";
-                statusDesc = "Bạn đang coi áp lực xã hội và công việc là thảm họa. Bạn giải quyết khó khăn bằng cách trốn chạy (nhảy việc liên tục, bỏ ngang).";
+            if (score <= 2) {
+                // 0–2 điểm
+                level = "TIER D";
+                crisisTitle = "Dấu hiệu kiệt sức cảm xúc — Tâm trí đang cần được lắng nghe";
+                lawTitle = "Khi áp lực tích lũy vượt ngưỡng chịu đựng";
+                lawDesc = "Về mặt biện chứng, bạn đang ở giai đoạn Lượng tiêu cực tích tụ quá lớn mà chưa tìm được hướng chuyển hóa. Phản ứng né tránh là cơ chế tự bảo vệ tâm lý tự nhiên — không phải yếu đuối, mà là tín hiệu cần được chú ý và chăm sóc.";
+                statusTitle = "Kiệt sức & Né tránh (Burnout & Avoidance)";
+                statusDesc = "Điều bạn đang trải qua rất thật và hoàn toàn có thể hiểu được. Khi cảm thấy quá tải, việc rút lui là phản ứng tự nhiên của tâm lý. Bạn không cần tự trách mình — điều bạn cần lúc này là được nghỉ ngơi thực sự và bắt đầu từ những bước rất nhỏ.";
                 prescriptions = [
-                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Ngưng mơ mộng ảo tưởng:</strong> Tắt Threads, TikTok 2 tiếng mỗi ngày để tập trung vào việc nhỏ nhất.",
-                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Rèn luyện tích lũy Lượng:</strong> Cam kết làm việc liên tục ở một vị trí ít nhất 4 tháng bất kể áp lực.",
-                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Đối mặt với mâu thuẫn:</strong> Khi bị phê bình, hãy viết ra 3 bài học thực tế thay vì viết đơn nghỉ việc."
+                    "<i class='fa-solid fa-heart text-red-400 mr-2'></i> <strong>Hãy nhẹ nhàng với bản thân trước:</strong> Tắt thông báo, dành 30 phút mỗi ngày chỉ để ngồi yên — không làm gì cả. Bạn không cần 'sửa' bản thân ngay hôm nay.",
+                    "<i class='fa-solid fa-heart text-red-400 mr-2'></i> <strong>Bắt đầu từ việc cực kỳ nhỏ:</strong> Chọn một việc duy nhất có thể hoàn thành trong 10 phút và làm nó. Hoàn thành việc nhỏ tạo ra cảm giác an toàn, từ đó xây dựng lại sự tự tin.",
+                    "<i class='fa-solid fa-heart text-red-400 mr-2'></i> <strong>Viết ra thay vì giữ trong lòng:</strong> Mỗi tối, viết một câu mô tả cảm xúc hôm nay — không cần hay, không cần đúng. Đây là cách nhận diện cảm xúc mà không bị chúng nhấn chìm.",
+                    "<i class='fa-solid fa-heart text-red-400 mr-2'></i> <strong>Tìm một người an toàn để nói chuyện:</strong> Không nhất thiết phải giải quyết vấn đề — đôi khi chỉ cần được nghe là đã bớt nặng hơn rất nhiều."
                 ];
-            } else if (score >= 2 && score <= 3) {
-                // Point 2 or 3
-                level = "CẤP ĐỘ M (Khủng hoảng trung bình)";
-                crisisTitle = "Hội chứng 'Mông lung Biện chứng' & Đấu tranh nửa vời";
-                lawTitle = "Quy luật Mâu thuẫn chưa được giải quyết triệt để";
-                lawDesc = "Bạn nhận diện được mâu thuẫn giữa lý tưởng và thực tế, cũng có ý thức tích lũy lượng, nhưng ý chí đấu tranh còn yếu, dễ lung lay tại các Điểm nút quan trọng.";
-                statusTitle = "Trạng thái 'Lấp lửng' tuổi 22";
-                statusDesc = "Bạn không trốn chạy ngay lập tức nhưng luôn làm việc trong trạng thái uể oải, hay than vãn và thiếu đi sự kiên định để thực hiện bước nhảy vọt.";
+            } else if (score <= 5) {
+                // 3–5 điểm
+                level = "TIER C";
+                crisisTitle = "Giai đoạn thức tỉnh — Bạn đã nhận ra, và đó là điều quan trọng nhất";
+                lawTitle = "Nhận thức bắt đầu thay đổi, hành động còn chưa theo kịp";
+                lawDesc = "Biện chứng học gọi đây là giai đoạn 'tích lũy Lượng về nhận thức' — bạn đã hiểu ra điều gì đó cần thay đổi, nhưng khoảng cách giữa nhận ra và hành động là hoàn toàn bình thường. Thay đổi thói quen tư duy cần thời gian, không phải ý chí thuần túy.";
+                statusTitle = "Nhận thức đang tăng — Hành động còn e dè";
+                statusDesc = "Bạn đang ở điểm bắt đầu của sự thay đổi — một thời điểm vừa khó khăn vừa đầy tiềm năng. Sự do dự bạn cảm thấy không phải là yếu đuối, mà là dấu hiệu bạn đang cân nhắc thận trọng hơn. Hãy tin rằng nhận ra vấn đề đã là một bước tiến thực sự.";
                 prescriptions = [
-                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Xác định điểm nút rõ ràng:</strong> Đặt ra mục tiêu cụ thể (ví dụ đạt chứng chỉ tiếng Anh mới hoặc học xong một khóa công cụ chuyên môn).",
-                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Học cách kế thừa biện chứng:</strong> Khi chán nản công việc cũ, hãy xem những gì mình đã làm được để tái chế, áp dụng sang hướng đi mới chứ không vứt bỏ toàn bộ.",
-                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Chủ động đối thoại:</strong> Thay vì ấm ức trong lòng, hãy trao đổi trực tiếp với cấp trên để tháo gỡ khó khăn công việc."
+                    "<i class='fa-solid fa-seedling text-orange-400 mr-2'></i> <strong>Ghi nhận sự tiến bộ nhỏ:</strong> Mỗi lần bạn chọn đối mặt thay vì né tránh — dù chỉ một lần — hãy tự ghi nhận điều đó. Não bộ học qua sự lặp lại được khen ngợi.",
+                    "<i class='fa-solid fa-seedling text-orange-400 mr-2'></i> <strong>Đặt câu hỏi thay vì phán xét bản thân:</strong> Khi muốn trốn chạy, hãy hỏi 'mình đang sợ điều gì cụ thể?' — câu trả lời thường nhỏ hơn nỗi sợ tưởng tượng rất nhiều.",
+                    "<i class='fa-solid fa-seedling text-orange-400 mr-2'></i> <strong>Tạo một thói quen neo giữ:</strong> Chọn một hành động nhỏ và lặp lại mỗi ngày cùng giờ — ví dụ đọc 10 trang sách hoặc đi bộ 15 phút. Sự ổn định nhỏ tạo ra nền tảng tâm lý lớn.",
+                    "<i class='fa-solid fa-seedling text-orange-400 mr-2'></i> <strong>Đừng cố thay đổi tất cả cùng lúc:</strong> Chọn một lĩnh vực duy nhất để cải thiện trong 30 ngày tới. Sự tập trung giúp não bộ xây dựng lại cảm giác kiểm soát."
                 ];
-            } else if (score >= 4 && score <= 5) {
-                // Point 4 or 5
-                level = "CẤP ĐỘ G (Khủng hoảng nhẹ)";
-                crisisTitle = "Trạng thái 'Gần đạt giác ngộ' - Sắp kiến tạo Bước nhảy";
-                lawTitle = "Sự tích lũy Lượng đang tiệm cận Điểm nút";
-                lawDesc = "Quy luật Lượng - Chất đang vận hành rất tốt trong tư duy của bạn. Bạn kiên trì tích lũy, có tư duy đối mặt mâu thuẫn khoa học. Bạn chỉ cần thêm một chút bản lĩnh kiên cường để hoàn tất phủ định của phủ định.";
-                statusTitle = "Bản lĩnh đang tôi luyện";
-                statusDesc = "Bạn có một tư duy thực tế mạnh mẽ, hiểu rõ luật chơi của xã hội. Tuy nhiên đôi lúc áp lực quá dồn dập khiến bạn mất thăng bằng ngắn hạn.";
+            } else if (score <= 8) {
+                // 6–8 điểm
+                level = "TIER B";
+                crisisTitle = "Đang trên hành trình phát triển — Tiến bộ có, chưa ổn định, và điều đó bình thường";
+                lawTitle = "Nội lực đang được xây dựng, chưa hoàn toàn vững chắc";
+                lawDesc = "Bạn đã có những bước tiến thực sự trong việc đối mặt với thử thách. Sự thiếu nhất quán bạn đang trải qua là một phần tự nhiên của quá trình học hỏi — không ai trưởng thành theo đường thẳng hoàn toàn, và mỗi lần vấp ngã đều mang thông tin có giá trị.";
+                statusTitle = "Đang học cách điều tiết cảm xúc";
+                statusDesc = "Bạn không còn trốn chạy ngay lập tức nữa — đó là sự tiến bộ rất thật, dù bạn có thể chưa nhận ra. Đôi khi bạn vẫn cảm thấy lạc lối hoặc uể oải, và điều đó ổn. Hãy tập chú ý đến những lần bạn chọn đứng vững thay vì chỉ nhớ những lúc chưa làm được.";
                 prescriptions = [
-                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Giữ vững ngọn lửa kiên trì:</strong> Đừng bỏ cuộc khi bước nhảy đổi Chất đang ở ngay trước mắt.",
-                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Định hình tư duy Đường xoắn ốc:</strong> Coi những thất bại tạm thời chỉ là nốt trầm tích lũy động lực để bay cao hơn.",
-                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Mở rộng mạng lưới quan hệ:</strong> Chia sẻ trải nghiệm để kết nối với các đàn anh/đàn chị đi trước nhằm học hỏi thêm."
+                    "<i class='fa-solid fa-seedling text-yellow-400 mr-2'></i> <strong>Xây dựng thói quen 'kiểm tra cảm xúc':</strong> Ba lần mỗi ngày, dừng lại 1 phút để hỏi bản thân: 'Mình đang cảm thấy thế nào?' — không cần làm gì với câu trả lời, chỉ cần nhận biết.",
+                    "<i class='fa-solid fa-seedling text-yellow-400 mr-2'></i> <strong>Đặt ranh giới lành mạnh:</strong> Học cách nói 'không' với những yêu cầu vượt quá sức mình — ranh giới không phải ích kỷ, mà là tự chăm sóc bản thân.",
+                    "<i class='fa-solid fa-seedling text-yellow-400 mr-2'></i> <strong>Khi xung đột xảy ra, hãy cho bản thân 24 giờ:</strong> Không phản ứng ngay lập tức khi cảm xúc còn nóng. Viết ra những gì bạn muốn nói — rồi quyết định có nên nói hay không.",
+                    "<i class='fa-solid fa-seedling text-yellow-400 mr-2'></i> <strong>Ghi nhận những gì bạn đã vượt qua:</strong> Làm một danh sách các tình huống khó khăn bạn đã xử lý được — dù nhỏ. Đây là bằng chứng cụ thể rằng bạn có khả năng đối mặt."
                 ];
-            } else if (score === 6) {
-                // Point 6
-                level = "CẤP ĐỘ A (Kháng độc biện chứng tuyệt đối)";
-                crisisTitle = "Chiến Thần Mác - Lênin thực chiến công sở";
-                lawTitle = "Sự vận hành đồng bộ, hoàn hảo của 3 Quy luật lớn";
-                lawDesc = "Bạn biến mâu thuẫn thành động lực phát triển tối đa. Bạn lấy sự tích lũy Lượng làm gốc và chủ động kiến tạo các Bước nhảy về Chất liên tục theo quỹ đạo đường xoắn ốc tiến bộ.";
-                statusTitle = "Anh hùng biện chứng thời đại mới";
-                statusDesc = "Không áp lực nào có thể quật ngã bạn. Bạn coi mọi drama công sở hay KPI là bài toán cần giải để nâng cấp giá trị bản thân.";
+            } else if (score <= 11) {
+                // 9–11 điểm
+                level = "TIER A";
+                crisisTitle = "Đang phát triển lành mạnh — Nền tảng tâm lý của bạn đang trở nên thực sự vững chắc";
+                lawTitle = "Kỹ năng điều tiết cảm xúc đang trưởng thành";
+                lawDesc = "Bạn đã xây dựng được những công cụ tâm lý hiệu quả để đối mặt với thử thách. Về mặt biện chứng, bạn đang vận dụng tốt quy luật mâu thuẫn — biến căng thẳng thành nguồn động lực thay vì để nó tích tụ thành áp lực.";
+                statusTitle = "Cân bằng và có khả năng phục hồi tốt";
+                statusDesc = "Bạn biết cách lắng nghe bản thân, nhận diện cảm xúc và hành động dựa trên lý trí thay vì chỉ phản ứng bốc đồng. Áp lực không còn là thứ bạn phải chạy trốn — bạn đã học cách sống cùng nó và khai thác năng lượng từ nó.";
                 prescriptions = [
-                    "<i class='fa-solid fa-capsules text-emerald-400 mr-2'></i> <strong>Trở thành người định hướng:</strong> Hãy chia sẻ năng lượng và tư duy tích cực này cho bạn bè xung quanh cùng vượt bão.",
-                    "<i class='fa-solid fa-capsules text-emerald-400 mr-2'></i> <strong>Chuẩn bị cho những chu kỳ mới:</strong> Không được chủ quan, tiếp tục tự phủ định bản thân để vươn lên những đỉnh cao sự nghiệp mới."
+                    "<i class='fa-solid fa-star text-blue-400 mr-2'></i> <strong>Đi sâu hơn vào việc tự hiểu bản thân:</strong> Thử viết nhật ký phản tư mỗi tuần — ghi lại một tình huống khó, cảm xúc của bạn, cách bạn phản ứng và bạn muốn phản ứng khác đi như thế nào.",
+                    "<i class='fa-solid fa-star text-blue-400 mr-2'></i> <strong>Chăm sóc các nhu cầu cơ bản:</strong> Giấc ngủ, chế độ ăn, vận động — đây là nền tảng cho mọi sức mạnh tâm lý. Khi các nhu cầu này được đáp ứng tốt, khả năng đối mặt với thử thách tăng lên đáng kể.",
+                    "<i class='fa-solid fa-star text-blue-400 mr-2'></i> <strong>Mở rộng vùng an toàn từng bước:</strong> Chủ động nhận thêm trách nhiệm mới mà bạn thấy hơi căng thẳng — đây là cách não bộ học rằng thử thách không nguy hiểm.",
+                    "<i class='fa-solid fa-star text-blue-400 mr-2'></i> <strong>Kết nối với cộng đồng:</strong> Chia sẻ những gì bạn đã học được với người xung quanh — giúp người khác cũng là cách củng cố bản thân."
+                ];
+            } else if (score <= 14) {
+                // 12–14 điểm
+                level = "TIER S";
+                crisisTitle = "Nội tâm vững vàng — Bạn đang tiệm cận trạng thái tự chủ cảm xúc thực sự";
+                lawTitle = "Bản lĩnh tâm lý đã được tôi luyện qua thực tế";
+                lawDesc = "Bạn không chỉ vượt qua thử thách mà còn trưởng thành qua từng lần vượt qua. Về mặt biện chứng, bạn đang vận dụng nhịp nhàng cả ba quy luật — tích lũy có hệ thống, giải quyết mâu thuẫn văn minh và biết giữ lại tinh hoa trong mỗi sự thay đổi.";
+                statusTitle = "Kiên cường và tiếp tục tăng trưởng (Resilient & Growing)";
+                statusDesc = "Bạn có nền tảng nội tâm vững chắc mà nhiều người phải mất nhiều năm mới xây dựng được. Đôi lúc những bão tố bất ngờ vẫn làm bạn chao đảo tạm thời — điều đó không phủ nhận sức mạnh bạn đã có. Đây là lúc để tinh chỉnh, không phải bắt đầu lại.";
+                prescriptions = [
+                    "<i class='fa-solid fa-star text-purple-400 mr-2'></i> <strong>Khám phá các giá trị cốt lõi của bạn:</strong> Viết ra 5 điều quan trọng nhất với bạn trong cuộc sống và công việc. Khi ra quyết định khó, hãy đối chiếu với danh sách này — nó sẽ giúp bạn luôn hành động nhất quán với bản thân.",
+                    "<i class='fa-solid fa-star text-purple-400 mr-2'></i> <strong>Luyện tập sự hiện diện (mindfulness):</strong> Dành 10 phút mỗi sáng để ngồi yên, chú ý đến hơi thở mà không phán xét. Đây là kỹ năng giúp bạn không bị cuốn vào phản ứng tự động khi áp lực đến.",
+                    "<i class='fa-solid fa-star text-purple-400 mr-2'></i> <strong>Chú ý đến 'tiếng nói bên trong':</strong> Khi tự nói chuyện với bản thân, bạn dùng ngôn ngữ nào? Thay 'mình thật vô dụng' bằng 'lần này mình chưa làm được, mình sẽ học từ đó'.",
+                    "<i class='fa-solid fa-star text-purple-400 mr-2'></i> <strong>Cân bằng giữa cho đi và nhận lại:</strong> Với nền tảng mạnh, bạn dễ trở thành người mà mọi người tìm đến — hãy nhớ rằng bạn cũng cần được nạp năng lượng, không chỉ trao đi."
+                ];
+            } else {
+                // 15–18 điểm
+                level = "TIER SS";
+                crisisTitle = "Trí tuệ cảm xúc cao — Bạn đang trưởng thành theo nghĩa sâu sắc và đích thực nhất";
+                lawTitle = "Trạng thái tự chủ nội tâm — Emotional Mastery";
+                lawDesc = "Bạn đã đạt đến sự tích hợp giữa nhận thức lý trí và trải nghiệm cảm xúc — điều mà biện chứng học gọi là 'sự thống nhất giữa lý luận và thực tiễn'. Đây là trạng thái mà phần lớn người trẻ cần nhiều năm thử thách thực tế mới chạm tới được.";
+                statusTitle = "Tự chủ cảm xúc & Thấu hiểu bản thân sâu sắc";
+                statusDesc = "Bạn không chỉ quản lý được cảm xúc của mình mà còn biết khai thác chúng như một nguồn thông tin — để hiểu mình hơn, hiểu người khác hơn. Các nhà tâm lý học gọi đây là 'post-traumatic growth': trưởng thành từ trong nghịch cảnh, không phải bất chấp nó.";
+                prescriptions = [
+                    "<i class='fa-solid fa-star text-emerald-400 mr-2'></i> <strong>Hãy cho phép bản thân không hoàn hảo:</strong> Ở Tier SS, cái bẫy lớn nhất là kỳ vọng luôn phải mạnh mẽ. Hãy nhớ rằng dễ bị tổn thương (vulnerability) không phải điểm yếu — đó là nền tảng của kết nối con người.",
+                    "<i class='fa-solid fa-star text-emerald-400 mr-2'></i> <strong>Trở thành không gian an toàn cho người khác:</strong> Sức mạnh lớn nhất của bạn lúc này không phải là làm được nhiều hơn, mà là tạo ra môi trường để người xung quanh cảm thấy được thấu hiểu.",
+                    "<i class='fa-solid fa-star text-emerald-400 mr-2'></i> <strong>Tiếp tục học hỏi từ những vùng chưa quen:</strong> Trí tuệ cảm xúc cao không có nghĩa là biết tất cả. Chủ động tìm đến những tình huống, con người và góc nhìn khác biệt để tiếp tục phát triển.",
+                    "<i class='fa-solid fa-star text-emerald-400 mr-2'></i> <strong>Chăm sóc bản thân như chăm sóc người bạn yêu quý:</strong> Bạn sẽ nói gì với người thân nếu họ đang kiệt sức? Hãy nói chính xác điều đó với bản thân mình."
                 ];
             }
 
@@ -431,8 +522,11 @@
             rxList.innerHTML = '';
             prescriptions.forEach(rx => {
                 const li = document.createElement('li');
-                li.className = "leading-relaxed border-b border-white/5 pb-2 last:border-none flex items-start";
-                li.innerHTML = rx;
+                li.className = "border-b border-white/5 pb-3 last:border-none last:pb-0";
+                const splitAt = rx.indexOf('</i>') + 4;
+                const iconHtml = rx.slice(0, splitAt);
+                const textHtml = rx.slice(splitAt).trim();
+                li.innerHTML = `<div class="flex items-start gap-2">${iconHtml.replace("mr-2'", "shrink-0 mt-0.5'")}<div class="leading-relaxed min-w-0">${textHtml}</div></div>`;
                 rxList.appendChild(li);
             });
         }
