@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trình Chẩn Đoán Khủng Hoảng Biện Chứng Gen Z - Bản Cao Cấp</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Afacad+Flux:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        comfortaa: ['Comfortaa', 'sans-serif'],
+                        afacad: ['"Afacad Flux"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Afacad Flux', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #311042 100%);
+            min-height: 100vh;
+        }
+        .btn-gradient {
+            background: linear-gradient(90deg, #a855f7 0%, #f97316 100%);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -5px rgba(168, 85, 247, 0.4);
+        }
+        .text-gradient {
+            background: linear-gradient(90deg, #c084fc 0%, #fb923c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(168, 85, 247, 0.3);
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(168, 85, 247, 0.5);
+        }
+    </style>
+</head>
+<body class="flex flex-col justify-between p-4 md:p-8 text-slate-100">
+
+    <header class="max-w-4xl w-full mx-auto text-center mb-8">
+        <div class="inline-block bg-white/5 backdrop-blur-md px-4 py-2 rounded-full border border-purple-500/30 text-xs md:text-sm font-semibold text-purple-300 mb-3 animate-pulse">
+            ✨ PHIÊN BẢN PRO MAX - ĐỀ TÀI SÁNG TẠO TRIẾT HỌC 2026
+        </div>
+        <h1 class="font-comfortaa text-3xl md:text-5xl font-bold tracking-tight">
+            Trình Chẩn Đoán <span class="text-gradient">Khủng Hoảng Biện Chứng</span>
+        </h1>
+        <p class="text-slate-400 mt-2 text-base md:text-lg">Đo lường mức độ khủng hoảng từ A đến Z bằng Hệ Thống Quy Luật Triết học Mác - Lênin</p>
+    </header>
+
+    <main class="max-w-3xl w-full mx-auto bg-slate-900/85 backdrop-blur-xl rounded-[30px] shadow-2xl border border-white/10 p-6 md:p-10 flex-grow flex flex-col justify-center min-h-[500px]">
+        
+        <!-- SCREEN 1: WELCOME SCREEN -->
+        <div id="screen-welcome" class="text-center space-y-6">
+            <div class="w-24 h-24 bg-gradient-to-tr from-purple-600 to-orange-500 rounded-3xl flex items-center justify-center mx-auto text-white text-4xl shadow-lg transform rotate-12 hover:rotate-0 transition-all duration-300">
+                <i class="fa-solid fa-brain-circuit"></i>
+            </div>
+            <div class="space-y-3">
+                <h2 class="font-comfortaa text-2xl md:text-3xl font-bold text-white">Bạn đang ở đâu trên cán cân trưởng thành?</h2>
+                <p class="text-slate-400 max-w-lg mx-auto text-base md:text-lg leading-relaxed">
+                    Sếp KPI dồn dập? Đồng nghiệp drama? Kỳ vọng gia đình nặng nề? Bạn đang giải quyết nó một cách khoa học hay chỉ trốn chạy? Hãy trả lời thành thật 6 câu hỏi tình huống để tìm ra "Bệnh án Triết học" của chính mình!
+                </p>
+            </div>
+            <div class="pt-4">
+                <button onclick="startDiagnosis()" class="btn-gradient text-white font-comfortaa font-bold text-lg px-8 py-4 rounded-full shadow-lg">
+                    Bắt Đầu Chẩn Đoán <i class="fa-solid fa-stethoscope ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: QUIZ SCREEN -->
+        <div id="screen-quiz" class="hidden space-y-6">
+            <!-- Progress Tracker -->
+            <div>
+                <div class="flex justify-between items-center text-xs text-purple-400 font-bold mb-2 uppercase tracking-widest">
+                    <span id="question-counter">CÂU HỎI 1/6</span>
+                    <span id="question-law-badge" class="bg-purple-950/80 border border-purple-500/30 px-3 py-1 rounded-full">QUY LUẬT LƯỢNG - CHẤT</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div id="progress-bar" class="btn-gradient h-full transition-all duration-500" style="width: 16.6%"></div>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="space-y-6">
+                <h3 id="question-text" class="font-comfortaa text-xl md:text-2xl font-bold text-slate-100 leading-snug">
+                    <!-- Text dynamic insertion -->
+                </h3>
+                
+                <div id="options-container" class="space-y-4">
+                    <!-- Options dynamic insertion -->
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: RESULT SCREEN -->
+        <div id="screen-result" class="hidden space-y-6 custom-scrollbar overflow-y-auto max-h-[600px] pr-2">
+            <div class="text-center space-y-2">
+                <div class="inline-block bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-4 py-1.5 rounded-full text-xs font-bold tracking-wider uppercase mb-2">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Báo Cáo Chẩn Đoán Hoàn Tất
+                </div>
+                <h2 class="font-comfortaa text-2xl md:text-3xl font-bold text-white">Kết Quả Phân Tích Biện Chứng</h2>
+            </div>
+
+            <!-- Dialectical Crisis Score Badge -->
+            <div class="bg-gradient-to-r from-slate-800 to-slate-900 border border-white/5 rounded-2xl p-6 text-center space-y-2 relative overflow-hidden">
+                <div class="absolute -right-8 -top-8 w-24 h-24 bg-purple-500/10 rounded-full blur-xl"></div>
+                <div class="text-sm text-slate-400 uppercase tracking-widest font-semibold">Chỉ số Khủng hoảng của bạn:</div>
+                <div id="result-crisis-level" class="text-4xl md:text-5xl font-black font-comfortaa text-gradient">
+                    CẤP ĐỘ Z
+                </div>
+                <div id="result-crisis-title" class="text-lg font-bold text-slate-200">
+                    <!-- Crisis Title -->
+                </div>
+            </div>
+
+            <!-- Detailed Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Law & Philosophy Box -->
+                <div class="bg-purple-950/20 border border-purple-500/20 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center space-x-2 text-purple-400 font-bold text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-scroll"></i>
+                        <span>Nguyên Lý Quy Luật Chi Phối</span>
+                    </div>
+                    <h4 id="result-law-title" class="font-comfortaa text-lg font-bold text-purple-300">
+                        <!-- Law Title -->
+                    </h4>
+                    <p id="result-law-desc" class="text-sm text-slate-300 leading-relaxed">
+                        <!-- Law Description -->
+                    </p>
+                </div>
+
+                <!-- Psychology Status Box -->
+                <div class="bg-orange-950/20 border border-orange-500/20 rounded-2xl p-5 space-y-3">
+                    <div class="flex items-center space-x-2 text-orange-400 font-bold text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-heart-pulse"></i>
+                        <span>Bệnh Án Tâm Lý Thực Tế</span>
+                    </div>
+                    <h4 id="result-status-title" class="font-comfortaa text-lg font-bold text-orange-300">
+                        <!-- Status Title -->
+                    </h4>
+                    <p id="result-status-desc" class="text-sm text-slate-300 leading-relaxed">
+                        <!-- Status Desc -->
+                    </p>
+                </div>
+            </div>
+
+            <!-- Prescription Box -->
+            <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-6 space-y-4">
+                <div class="flex items-center space-x-2 text-emerald-400 font-bold text-lg font-comfortaa">
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>Toa Thuốc Điều Trị Biện Chứng (Giải Pháp)</span>
+                </div>
+                <ul id="result-prescription" class="space-y-3 text-sm text-slate-300 list-none pl-0">
+                    <!-- Prescription items will be injected -->
+                </ul>
+            </div>
+
+            <!-- Navigation Actions -->
+            <div class="text-center pt-4 flex flex-col sm:flex-row justify-center gap-3">
+                <button onclick="restartQuiz()" class="btn-gradient text-white font-comfortaa font-bold px-6 py-3 rounded-full shadow-md text-sm">
+                    <i class="fa-solid fa-rotate-left mr-2"></i> Chẩn đoán cho người tiếp theo
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="text-slate-500 text-center mt-8 text-xs max-w-4xl w-full mx-auto border-t border-slate-800 pt-4">
+        © 2026 Nhóm Thuyết Trình Triết Học - Bản Quyền Thuộc Về Những Sĩ Tử Kiên Cường Vượt Bão Văn Phòng.
+    </footer>
+
+    <script>
+        // Database of 6 detailed academic & engaging questions
+        const quizData = [
+            {
+                id: 1,
+                law: "Quy luật Lượng - Chất",
+                lawBadge: "Lượng - Chất (Tích Lũy Kỹ Năng)",
+                question: "Để chuẩn bị hành trang đi làm, bạn đã đầu tư tích lũy kiến thức chuyên môn và trải nghiệm thực tiễn ra sao?",
+                options: [
+                    {
+                        text: "A. Chỉ học để đối phó thi cử, rảnh là nằm lướt TikTok/Chơi game. Nghĩ rằng tấm bằng đại học là tấm vé vàng tự động có việc tốt.",
+                        points: 0,
+                        feedback: "Bạn đang thiếu hụt nghiêm trọng về Lượng. Chưa tích lũy đủ Lượng thì không bao giờ có thể tự tạo ra Bước nhảy về Chất!"
+                    },
+                    {
+                        text: "B. Chăm học, chủ động đi làm thêm các công việc liên quan, học thêm ngoại ngữ/tin học và sửa đổi CV liên tục qua các lần bị từ chối.",
+                        points: 1,
+                        feedback: "Chính xác! Bạn đang tích lũy Lượng rất tốt. Điểm nút và Bước nhảy đổi Chất chỉ là vấn đề thời gian."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                law: "Quy luật Mâu thuẫn",
+                lawBadge: "Mâu thuẫn (Đối mặt thử thách)",
+                question: "Gặp phải sếp đầu tiên siêu khó tính, soi từng ly từng tí, giao KPI ngập đầu kèm đồng nghiệp hay mách lẻo, bạn sẽ ứng xử thế nào?",
+                options: [
+                    {
+                        text: "A. Quá stress! Lên Threads đăng bài bóc phốt ẩn danh rồi viết đơn xin nghỉ việc ngay lập tức không lý do.",
+                        points: 0,
+                        feedback: "Bạn chọn trốn tránh mâu thuẫn. Nhớ rằng: Sự đấu tranh giữa các mặt đối lập mới là động lực thúc đẩy sự phát triển."
+                    },
+                    {
+                        text: "B. Khóc một chút rồi lau nước mắt, cố gắng học cách xử lý của người giỏi, tìm kiếm tiếng nói chung hoặc chứng minh năng lực để sếp nể phục.",
+                        points: 1,
+                        feedback: "Bản lĩnh xuất sắc! Giải quyết mâu thuẫn chính là hạt nhân giúp nâng tầm đẳng cấp tư duy công sở của bạn."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                law: "Quy luật Phủ định của phủ định",
+                lawBadge: "Phủ định của phủ định",
+                question: "Sau vài tháng đi làm bầm dập, nhìn lại thời sinh viên vô lo vô nghĩ được bố mẹ bao nuôi, bạn suy nghĩ điều gì?",
+                options: [
+                    {
+                        text: "A. Chỉ muốn thời gian quay lại, tiếc nuối tuổi trẻ học đường và nghĩ cuộc sống đi làm hiện tại hoàn toàn là một bước lùi tồi tệ.",
+                        points: 0,
+                        feedback: "Bạn đang hoài niệm quá khứ và sợ hãi sự Phủ định. Sự phát triển bắt buộc phải phủ định cái cũ để mở ra cái mới tiến bộ hơn."
+                    },
+                    {
+                        text: "B. Hiểu rằng dù mệt mỏi nhưng mình đã biết kiếm tiền, tự lập và hiểu đời hơn. Mình vẫn là mình nhưng ở phiên bản trưởng thành hơn.",
+                        points: 1,
+                        feedback: "Tuyệt hảo! Bạn đang phát triển đúng theo hình Đường xoắn ốc của quy luật phủ định của phủ định."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                law: "Quy luật Lượng - Chất",
+                lawBadge: "Lượng - Chất (Điểm nút & Bước nhảy)",
+                question: "Bạn rải CV 20 nơi nhưng tất cả đều gửi thư từ chối hoặc im lặng. Trạng thái phản ứng của bạn là gì?",
+                options: [
+                    {
+                        text: "A. Nghi ngờ bản thân vô dụng, trầm cảm, quyết định nằm nhà ăn bám gia đình và đổ lỗi cho kinh tế suy thoái.",
+                        points: 0,
+                        feedback: "Bạn chưa hiểu về khái niệm Điểm nút. Lượng từ chối hiện tại chính là chỉ số cho thấy bạn cần bồi đắp thêm kỹ năng gì đó để vượt ngưỡng."
+                    },
+                    {
+                        text: "B. Nhìn nhận lại CV, phân tích yêu cầu tuyển dụng xem mình thiếu hụt chứng chỉ gì, chủ động kết nối để xin feedback và cải thiện kỹ năng.",
+                        points: 1,
+                        feedback: "Rất khoa học! Bạn hiểu rằng mỗi lần bị từ chối là một đơn vị Lượng đang tích tụ, chuẩn bị cho Điểm nút bùng nổ."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                law: "Quy luật Mâu thuẫn",
+                lawBadge: "Mâu thuẫn (Giải quyết xung đột)",
+                question: "Bạn phát hiện ra ý tưởng/dự án của mình bị đồng nghiệp cũ cướp công trắng trợn trước mặt sếp lớn trong cuộc họp.",
+                options: [
+                    {
+                        text: "A. Im lặng chịu đựng ấm ức, sau đó nghỉ việc trong im lặng (Quiet Quitting) hoặc tỏ thái độ hằn học ra mặt làm hỏng không khí làm việc.",
+                        points: 0,
+                        feedback: "Bạn đang chọn giải pháp triệt tiêu mâu thuẫn một cách cực đoan, biến xung đột lành mạnh thành mâu thuẫn tàn phá tinh thần của chính mình."
+                    },
+                    {
+                        text: "B. Thu thập bằng chứng làm việc (email, bản nháp), hẹn gặp sếp và đồng nghiệp đó nói chuyện thẳng thắn, rõ ràng dựa trên số liệu thực tế.",
+                        points: 1,
+                        feedback: "Quá thông minh! Bạn biết cách giải quyết mâu thuẫn bằng con đường đấu tranh biện chứng văn minh, mang lại sự công bằng."
+                    }
+                ]
+            },
+            {
+                id: 6,
+                law: "Quy luật Phủ định của phủ định",
+                lawBadge: "Phủ định của phủ định (Tính kế thừa)",
+                question: "Bạn muốn thay đổi hoàn toàn định hướng công việc (ví dụ chuyển từ sư phạm sang làm Marketing kỹ thuật số) sau 1 năm thất bại.",
+                options: [
+                    {
+                        text: "A. Coi 4 năm học đại học sư phạm trước đó là hoàn toàn vô ích và bỏ đi hết, bắt đầu lại từ con số không với tâm lý oán hận.",
+                        points: 0,
+                        feedback: "Bạn đang phủ định sạch trơn (phủ định siêu hình). Hãy nhớ phủ định biện chứng luôn mang tính kế thừa, giữ lại tinh hoa cũ."
+                    },
+                    {
+                        text: "B. Kế thừa kỹ năng đứng lớp, soạn giáo án để áp dụng vào việc làm Content Creator/Marketing đào tạo. Biến chuyên môn cũ thành bệ phóng cho nghề mới.",
+                        points: 1,
+                        feedback: "Đỉnh cao kế thừa biện chứng! Sự phát triển luôn giữ lại những giá trị cốt lõi của giai đoạn trước."
+                    }
+                ]
+            }
+        ];
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+
+        function startDiagnosis() {
+            document.getElementById('screen-welcome').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            
+            // Set counter and progress
+            document.getElementById('question-counter').innerText = `CÂU HỎI ${currentQuestionIndex + 1}/${quizData.length}`;
+            document.getElementById('question-law-badge').innerText = currentQuestion.lawBadge;
+            const progressPercent = ((currentQuestionIndex + 1) / quizData.length) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPercent}%`;
+
+            // Set text
+            document.getElementById('question-text').innerText = currentQuestion.question;
+
+            // Generate options
+            const optionsContainer = document.getElementById('options-container');
+            optionsContainer.innerHTML = '';
+            
+            currentQuestion.options.forEach((opt) => {
+                const button = document.createElement('button');
+                button.className = "w-full text-left bg-slate-800/80 hover:bg-slate-700/80 border border-slate-700 hover:border-purple-500/50 p-5 rounded-2xl font-semibold text-slate-200 transition-all duration-300 hover:scale-[1.01] active:scale-[0.99] flex justify-between items-center group shadow-md";
+                button.innerHTML = `
+                    <span class="pr-4 leading-relaxed text-sm md:text-base">${opt.text}</span>
+                    <i class="fa-solid fa-circle-arrow-right text-slate-500 group-hover:text-purple-400 transition-colors text-xl"></i>
+                `;
+                button.onclick = () => selectOption(opt.points, opt.feedback);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function selectOption(points, feedback) {
+            score += points;
+            currentQuestionIndex++;
+            
+            if (currentQuestionIndex < quizData.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            let level = "";
+            let crisisTitle = "";
+            let lawTitle = "";
+            let lawDesc = "";
+            let statusTitle = "";
+            let statusDesc = "";
+            let prescriptions = [];
+
+            // A-Z Crisis scale mapping based on total points
+            if (score <= 1) {
+                // Point 0 or 1
+                level = "CẤP ĐỘ Z (Khủng hoảng cực đại)";
+                crisisTitle = "Hội chứng 'Vô tri Biện chứng' & Trốn chạy thực tại";
+                lawTitle = "Sự bế tắc của các Quy luật Vận động";
+                lawDesc = "Lượng rỗng tuếch nhưng ham muốn Chất đổi đời. Tránh né đấu tranh mâu thuẫn để tìm kiếm sự an nhàn ảo tưởng. Phủ định sạch trơn quá khứ mà không kế thừa tiến bộ.";
+                statusTitle = "Tâm hồn thủy tinh dễ vỡ";
+                statusDesc = "Bạn đang coi áp lực xã hội và công việc là thảm họa. Bạn giải quyết khó khăn bằng cách trốn chạy (nhảy việc liên tục, bỏ ngang).";
+                prescriptions = [
+                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Ngưng mơ mộng ảo tưởng:</strong> Tắt Threads, TikTok 2 tiếng mỗi ngày để tập trung vào việc nhỏ nhất.",
+                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Rèn luyện tích lũy Lượng:</strong> Cam kết làm việc liên tục ở một vị trí ít nhất 4 tháng bất kể áp lực.",
+                    "<i class='fa-solid fa-capsules text-red-400 mr-2'></i> <strong>Đối mặt với mâu thuẫn:</strong> Khi bị phê bình, hãy viết ra 3 bài học thực tế thay vì viết đơn nghỉ việc."
+                ];
+            } else if (score >= 2 && score <= 3) {
+                // Point 2 or 3
+                level = "CẤP ĐỘ M (Khủng hoảng trung bình)";
+                crisisTitle = "Hội chứng 'Mông lung Biện chứng' & Đấu tranh nửa vời";
+                lawTitle = "Quy luật Mâu thuẫn chưa được giải quyết triệt để";
+                lawDesc = "Bạn nhận diện được mâu thuẫn giữa lý tưởng và thực tế, cũng có ý thức tích lũy lượng, nhưng ý chí đấu tranh còn yếu, dễ lung lay tại các Điểm nút quan trọng.";
+                statusTitle = "Trạng thái 'Lấp lửng' tuổi 22";
+                statusDesc = "Bạn không trốn chạy ngay lập tức nhưng luôn làm việc trong trạng thái uể oải, hay than vãn và thiếu đi sự kiên định để thực hiện bước nhảy vọt.";
+                prescriptions = [
+                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Xác định điểm nút rõ ràng:</strong> Đặt ra mục tiêu cụ thể (ví dụ đạt chứng chỉ tiếng Anh mới hoặc học xong một khóa công cụ chuyên môn).",
+                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Học cách kế thừa biện chứng:</strong> Khi chán nản công việc cũ, hãy xem những gì mình đã làm được để tái chế, áp dụng sang hướng đi mới chứ không vứt bỏ toàn bộ.",
+                    "<i class='fa-solid fa-capsules text-yellow-400 mr-2'></i> <strong>Chủ động đối thoại:</strong> Thay vì ấm ức trong lòng, hãy trao đổi trực tiếp với cấp trên để tháo gỡ khó khăn công việc."
+                ];
+            } else if (score >= 4 && score <= 5) {
+                // Point 4 or 5
+                level = "CẤP ĐỘ G (Khủng hoảng nhẹ)";
+                crisisTitle = "Trạng thái 'Gần đạt giác ngộ' - Sắp kiến tạo Bước nhảy";
+                lawTitle = "Sự tích lũy Lượng đang tiệm cận Điểm nút";
+                lawDesc = "Quy luật Lượng - Chất đang vận hành rất tốt trong tư duy của bạn. Bạn kiên trì tích lũy, có tư duy đối mặt mâu thuẫn khoa học. Bạn chỉ cần thêm một chút bản lĩnh kiên cường để hoàn tất phủ định của phủ định.";
+                statusTitle = "Bản lĩnh đang tôi luyện";
+                statusDesc = "Bạn có một tư duy thực tế mạnh mẽ, hiểu rõ luật chơi của xã hội. Tuy nhiên đôi lúc áp lực quá dồn dập khiến bạn mất thăng bằng ngắn hạn.";
+                prescriptions = [
+                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Giữ vững ngọn lửa kiên trì:</strong> Đừng bỏ cuộc khi bước nhảy đổi Chất đang ở ngay trước mắt.",
+                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Định hình tư duy Đường xoắn ốc:</strong> Coi những thất bại tạm thời chỉ là nốt trầm tích lũy động lực để bay cao hơn.",
+                    "<i class='fa-solid fa-capsules text-blue-400 mr-2'></i> <strong>Mở rộng mạng lưới quan hệ:</strong> Chia sẻ trải nghiệm để kết nối với các đàn anh/đàn chị đi trước nhằm học hỏi thêm."
+                ];
+            } else if (score === 6) {
+                // Point 6
+                level = "CẤP ĐỘ A (Kháng độc biện chứng tuyệt đối)";
+                crisisTitle = "Chiến Thần Mác - Lênin thực chiến công sở";
+                lawTitle = "Sự vận hành đồng bộ, hoàn hảo của 3 Quy luật lớn";
+                lawDesc = "Bạn biến mâu thuẫn thành động lực phát triển tối đa. Bạn lấy sự tích lũy Lượng làm gốc và chủ động kiến tạo các Bước nhảy về Chất liên tục theo quỹ đạo đường xoắn ốc tiến bộ.";
+                statusTitle = "Anh hùng biện chứng thời đại mới";
+                statusDesc = "Không áp lực nào có thể quật ngã bạn. Bạn coi mọi drama công sở hay KPI là bài toán cần giải để nâng cấp giá trị bản thân.";
+                prescriptions = [
+                    "<i class='fa-solid fa-capsules text-emerald-400 mr-2'></i> <strong>Trở thành người định hướng:</strong> Hãy chia sẻ năng lượng và tư duy tích cực này cho bạn bè xung quanh cùng vượt bão.",
+                    "<i class='fa-solid fa-capsules text-emerald-400 mr-2'></i> <strong>Chuẩn bị cho những chu kỳ mới:</strong> Không được chủ quan, tiếp tục tự phủ định bản thân để vươn lên những đỉnh cao sự nghiệp mới."
+                ];
+            }
+
+            // Render result to dynamic elements
+            document.getElementById('result-crisis-level').innerText = level;
+            document.getElementById('result-crisis-title').innerText = crisisTitle;
+            document.getElementById('result-law-title').innerText = lawTitle;
+            document.getElementById('result-law-desc').innerText = lawDesc;
+            document.getElementById('result-status-title').innerText = statusTitle;
+            document.getElementById('result-status-desc').innerText = statusDesc;
+
+            const rxList = document.getElementById('result-prescription');
+            rxList.innerHTML = '';
+            prescriptions.forEach(rx => {
+                const li = document.createElement('li');
+                li.className = "leading-relaxed border-b border-white/5 pb-2 last:border-none flex items-start";
+                li.innerHTML = rx;
+                rxList.appendChild(li);
+            });
+        }
+
+        function restartQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-welcome').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
