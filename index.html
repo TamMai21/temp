@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CellVany – Mỹ Phẩm Thuần Chay</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap"
+    rel="stylesheet">
+  <script src="config.js"></script>
+  <style>
+    /* ===== CSS VARIABLES ===== */
+    :root {
+      --green-deep: #1a3a2a;
+      --green-mid: #2d6a4f;
+      --green-bright: #40916c;
+      --green-light: #74c69d;
+      --green-pale: #b7e4c7;
+      --green-mist: #d8f3dc;
+      --green-foam: #f0faf3;
+      --cream: #faf9f5;
+      --warm-white: #fff;
+      --text-dark: #1a2e22;
+      --text-mid: #3d5a47;
+      --text-light: #6b8f78;
+      --gold: #c9a96e;
+      --gold-light: #e8d5b0;
+      --shadow-soft: 0 4px 30px rgba(26, 58, 42, 0.08);
+      --shadow-card: 0 2px 20px rgba(26, 58, 42, 0.12);
+      --radius: 16px;
+      --radius-sm: 8px;
+      --transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ===== RESET & BASE ===== */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--text-dark);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: none;
+      font-family: inherit;
+    }
+
+    /* ===== PAGES ===== */
+    .page {
+      display: none;
+      min-height: 100vh;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* ===== LOADING SCREEN ===== */
+    #loading-screen {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--green-deep);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      transition: opacity 0.6s ease;
+    }
+
+    #loading-screen.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .loading-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 3rem;
+      font-weight: 300;
+      letter-spacing: 0.3em;
+      color: var(--green-mist);
+    }
+
+    .loading-bar-wrap {
+      width: 200px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .loading-bar {
+      height: 100%;
+      width: 0;
+      background: var(--green-light);
+      border-radius: 2px;
+      animation: loadProgress 1.8s ease forwards;
+    }
+
+    @keyframes loadProgress {
+      to {
+        width: 100%;
+      }
+    }
+
+    .loading-text {
+      color: var(--green-pale);
+      font-size: 0.8rem;
+      letter-spacing: 0.15em;
+    }
+
+    /* ===== FACE SCAN OVERLAY ===== */
+    #face-scan-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(15, 30, 22, 0.97);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      padding: 24px;
+    }
+
+    #face-scan-overlay h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.8rem;
+      font-weight: 300;
+      color: var(--green-mist);
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    #face-scan-overlay p {
+      color: var(--green-pale);
+      font-size: 0.85rem;
+      text-align: center;
+      max-width: 280px;
+    }
+
+    .camera-frame {
+      position: relative;
+      width: 260px;
+      height: 260px;
+    }
+
+    .camera-frame video,
+    .camera-frame canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .scan-ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px dashed var(--green-light);
+      animation: spinRing 4s linear infinite;
+    }
+
+    .scan-ring-2 {
+      position: absolute;
+      inset: -16px;
+      border-radius: 50%;
+      border: 1px solid rgba(116, 198, 157, 0.3);
+      animation: spinRing 7s linear infinite reverse;
+    }
+
+    @keyframes spinRing {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .scan-corners {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+    }
+
+    .scan-line {
+      position: absolute;
+      left: 10%;
+      right: 10%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green-light), transparent);
+      top: 0;
+      animation: scanLine 2.5s ease-in-out infinite;
+      border-radius: 2px;
+    }
+
+    @keyframes scanLine {
+
+      0%,
+      100% {
+        top: 10%;
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      80% {
+        opacity: 1;
+      }
+
+      50% {
+        top: 85%;
+      }
+    }
+
+    .btn-capture {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--green-bright);
+      border: 4px solid rgba(116, 198, 157, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+      box-shadow: 0 0 30px rgba(64, 145, 108, 0.4);
+    }
+
+    .btn-capture:hover {
+      transform: scale(1.08);
+      background: var(--green-light);
+    }
+
+    .btn-capture svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
+    }
+
+    .btn-skip-scan {
+      color: var(--green-pale);
+      font-size: 0.8rem;
+      text-decoration: underline;
+      opacity: 0.7;
+      background: none;
+      transition: opacity 0.2s;
+    }
+
+    .btn-skip-scan:hover {
+      opacity: 1;
+    }
+
+    #scan-result-msg {
+      color: var(--green-light);
+      font-size: 0.85rem;
+      text-align: center;
+      min-height: 20px;
+    }
+
+    /* ===== NAVBAR ===== */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(250, 249, 245, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(45, 106, 79, 0.1);
+      padding: 0 5%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 70px;
+      transition: var(--transition);
+    }
+
+    .nav-logo {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      color: var(--green-deep);
+      cursor: pointer;
+    }
+
+    .nav-logo span {
+      color: var(--green-bright);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      color: var(--text-mid);
+      transition: color 0.2s;
+      cursor: pointer;
+    }
+
+    .nav-links a:hover {
+      color: var(--green-bright);
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .cart-btn {
+      position: relative;
+      padding: 8px;
+      color: var(--green-deep);
+      transition: color 0.2s;
+    }
+
+    .cart-btn:hover {
+      color: var(--green-bright);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: var(--green-bright);
+      color: white;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      font-size: 0.65rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+
+    .cart-count.show {
+      display: flex;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      padding: 8px;
+    }
+
+    .hamburger span {
+      display: block;
+      width: 22px;
+      height: 2px;
+      background: var(--green-deep);
+      border-radius: 2px;
+      transition: var(--transition);
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 90vh;
+      padding: 80px 5%;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      right: -10%;
+      top: -20%;
+      width: 70%;
+      height: 140%;
+      border-radius: 50%;
+      background: radial-gradient(ellipse, var(--green-mist) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--green-mist);
+      color: var(--green-mid);
+      padding: 6px 16px;
+      border-radius: 40px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .hero-badge::before {
+      content: '🌿';
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      font-weight: 300;
+      line-height: 1.15;
+      color: var(--green-deep);
+      margin-bottom: 24px;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      color: var(--green-bright);
+    }
+
+    .hero-desc {
+      color: var(--text-mid);
+      font-size: 1rem;
+      max-width: 420px;
+      margin-bottom: 40px;
+      line-height: 1.8;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      background: var(--green-deep);
+      color: white;
+      padding: 14px 32px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: var(--transition);
+      box-shadow: 0 4px 20px rgba(26, 58, 42, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: var(--green-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(64, 145, 108, 0.35);
+    }
+
+    .btn-outline {
+      border: 1.5px solid var(--green-bright);
+      color: var(--green-bright);
+      padding: 13px 28px;
+      border-radius: 50px;
+      font-size: 0.88rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      transition: var(--transition);
+    }
+
+    .btn-outline:hover {
+      background: var(--green-mist);
+    }
+
+    .hero-visual {
+      position: relative;
+    }
+
+    .hero-img-wrap {
+      width: 100%;
+      aspect-ratio: 4/5;
+      border-radius: 40px 40px 120px 40px;
+      overflow: hidden;
+      position: relative;
+      box-shadow: 0 20px 60px rgba(26, 58, 42, 0.2);
+    }
+
+    .hero-img-placeholder {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--green-mist) 0%, var(--green-pale) 50%, var(--green-light) 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .hero-img-placeholder .leaf-icon {
+      font-size: 5rem;
+      opacity: 0.5;
+    }
+
+    .hero-img-placeholder span {
+      color: var(--green-mid);
+      font-size: 0.85rem;
+    }
+
+    .hero-floating-badge {
+      position: absolute;
+      bottom: 32px;
+      left: -24px;
+      background: white;
+      border-radius: 16px;
+      padding: 16px 20px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .hero-floating-badge .icon {
+      font-size: 1.8rem;
+    }
+
+    .hero-floating-badge strong {
+      display: block;
+      font-size: 1.1rem;
+      color: var(--green-deep);
+    }
+
+    .hero-floating-badge span {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* ===== AI RECOMMENDATION BANNER ===== */
+    #ai-reco-section {
+      margin: 0 5% 60px;
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 100%);
+      border-radius: 24px;
+      padding: 40px 48px;
+      display: none;
+    }
+
+    #ai-reco-section.show {
+      display: block;
+    }
+
+    #ai-reco-section h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      font-weight: 300;
+      color: white;
+      margin-bottom: 8px;
+    }
+
+    #ai-reco-section p {
+      color: var(--green-pale);
+      font-size: 0.9rem;
+      margin-bottom: 28px;
+    }
+
+    .ai-reco-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+
+    /* ===== SECTION STYLES ===== */
+    section {
+      padding: 80px 5%;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 56px;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--green-bright);
+      margin-bottom: 12px;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 2.8rem);
+      font-weight: 300;
+      color: var(--green-deep);
+      line-height: 1.2;
+    }
+
+    .section-header p {
+      color: var(--text-light);
+      max-width: 480px;
+      margin: 12px auto 0;
+    }
+
+    /* ===== PRODUCTS GRID ===== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 28px;
+    }
+
+    .product-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-soft);
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-card);
+    }
+
+    .product-img {
+      aspect-ratio: 1;
+      position: relative;
+      overflow: hidden;
+      background: var(--green-foam);
+    }
+
+    .product-img-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--green-foam), var(--green-mist));
+      font-size: 3rem;
+      color: var(--green-light);
+    }
+
+    .product-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .product-card:hover .product-img img {
+      transform: scale(1.05);
+    }
+
+    .product-badge-vegan {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--green-deep);
+      color: var(--green-pale);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      font-weight: 500;
+    }
+
+    .product-info {
+      padding: 20px;
+    }
+
+    .product-category {
+      font-size: 0.72rem;
+      color: var(--green-bright);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    .product-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.1rem;
+      font-weight: 400;
+      color: var(--green-deep);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .product-desc {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      line-height: 1.5;
+      margin-bottom: 16px;
+    }
+
+    .product-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--green-deep);
+    }
+
+    .btn-add-cart {
+      background: var(--green-mist);
+      color: var(--green-deep);
+      padding: 8px 16px;
+      border-radius: 24px;
+      font-size: 0.78rem;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-add-cart:hover {
+      background: var(--green-bright);
+      color: white;
+    }
+
+    .products-loading {
+      text-align: center;
+      color: var(--text-light);
+      padding: 60px;
+      font-size: 0.9rem;
+      grid-column: 1/-1;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--green-pale);
+      border-top-color: var(--green-bright);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ===== VALUES SECTION ===== */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+    }
+
+    .value-card {
+      text-align: center;
+      padding: 40px 28px;
+      background: white;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+    }
+
+    .value-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .value-icon {
+      font-size: 2.4rem;
+      margin-bottom: 16px;
+    }
+
+    .value-card h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--green-deep);
+      margin-bottom: 10px;
+    }
+
+    .value-card p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* ===== TESTIMONIALS ===== */
+    #testimonials {
+      background: var(--green-foam);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+
+    .testimonial-card {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .stars {
+      color: var(--gold);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.05rem;
+      font-style: italic;
+      color: var(--text-mid);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .author-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--green-mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .author-name {
+      font-weight: 500;
+      font-size: 0.88rem;
+      color: var(--green-deep);
+    }
+
+    .author-location {
+      font-size: 0.75rem;
+      color: var(--text-light);
+    }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--green-deep) 0%, var(--green-mid) 60%, var(--green-bright) 100%);
+      padding: 80px 5%;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -20%;
+      width: 140%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(116, 198, 157, 0.15) 0%, transparent 60%);
+    }
+
+    .cta-banner h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.8rem, 3vw, 3rem);
+      font-weight: 300;
+      color: white;
+      margin-bottom: 16px;
+    }
+
+    .cta-banner p {
+      color: var(--green-pale);
+      max-width: 440px;
+      margin: 0 auto 36px;
+    }
+
+    .btn-cta-white {
+      background: white;
+      color: var(--green-deep);
+      padding: 14px 36px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: inline-block;
+      transition: var(--transition);
+    }
+
+    .btn-cta-white:hover {
+      background: var(--green-mist);
+      transform: translateY(-2px);
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      background: var(--green-deep);
+      color: var(--green-pale);
+      padding: 60px 5% 32px;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+      margin-bottom: 48px;
+    }
+
+    .footer-brand .nav-logo {
+      color: var(--green-mist);
+      margin-bottom: 16px;
+    }
+
+    .footer-brand p {
+      font-size: 0.85rem;
+      color: rgba(183, 228, 199, 0.7);
+      line-height: 1.8;
+      max-width: 260px;
+    }
+
+    .footer-col h5 {
+      font-size: 0.75rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--green-light);
+      margin-bottom: 20px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.85rem;
+      color: rgba(183, 228, 199, 0.7);
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .footer-col a:hover {
+      color: var(--green-mist);
+    }
+
+    .footer-bottom {
+      border-top: 1px solid rgba(116, 198, 157, 0.15);
+      padding-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.78rem;
+      color: rgba(183, 228, 199, 0.5);
+    }
+
+    /* ===== PRODUCT DETAIL PAGE ===== */
+    .product-detail-container {
+      max-width: 1100px;
+      margin: 60px auto;
+      padding: 0 5%;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green-bright);
+      font-size: 0.85rem;
+      margin-bottom: 40px;
+      cursor: pointer;
+      transition: gap 0.2s;
+    }
+
+    .back-btn:hover {
+      gap: 12px;
+    }
+
+    .product-detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
+    }
+
+    .detail-img-wrap {
+      aspect-ratio: 1;
+      border-radius: 32px;
+      overflow: hidden;
+      background: var(--green-foam);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+    }
+
+    .detail-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .detail-category {
+      font-size: 0.75rem;
+      color: var(--green-bright);
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .detail-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--green-deep);
+      margin-bottom: 16px;
+      line-height: 1.2;
+    }
+
+    .detail-price {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: var(--green-bright);
+      margin-bottom: 24px;
+    }
+
+    .detail-desc {
+      color: var(--text-mid);
+      line-height: 1.9;
+      font-size: 0.95rem;
+      margin-bottom: 32px;
+    }
+
+    .detail-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .tag {
+      background: var(--green-mist);
+      color: var(--green-mid);
+      padding: 5px 14px;
+      border-radius: 20px;
+      font-size: 0.78rem;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn-add-cart-large {
+      flex: 1;
+      background: var(--green-deep);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 500;
+      font-size: 0.9rem;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .btn-add-cart-large:hover {
+      background: var(--green-bright);
+      transform: translateY(-2px);
+    }
+
+    .detail-ingredients {
+      margin-top: 48px;
+    }
+
+    .detail-ingredients h4 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.2rem;
+      color: var(--green-deep);
+      margin-bottom: 12px;
+    }
+
+    .detail-ingredients p {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      line-height: 1.8;
+    }
+
+    /* ===== CART PAGE ===== */
+    .cart-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 0 5%;
+    }
+
+    .cart-container h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.2rem;
+      font-weight: 300;
+      color: var(--green-deep);
+      margin-bottom: 40px;
+    }
+
+    .cart-items {
+      margin-bottom: 32px;
+    }
+
+    .cart-item {
+      background: white;
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow-soft);
+      transition: var(--transition);
+    }
+
+    .cart-item-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 12px;
+      background: var(--green-foam);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .cart-item-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cart-item-info {
+      flex: 1;
+    }
+
+    .cart-item-name {
+      font-weight: 500;
+      color: var(--green-deep);
+      margin-bottom: 4px;
+    }
+
+    .cart-item-price {
+      font-size: 0.88rem;
+      color: var(--text-light);
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .qty-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1.5px solid var(--green-pale);
+      color: var(--green-deep);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    .qty-btn:hover {
+      background: var(--green-mist);
+      border-color: var(--green-bright);
+    }
+
+    .qty-val {
+      font-weight: 600;
+      color: var(--green-deep);
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .cart-item-total {
+      font-weight: 600;
+      color: var(--green-deep);
+      min-width: 80px;
+      text-align: right;
+    }
+
+    .cart-remove {
+      color: var(--text-light);
+      font-size: 1.2rem;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    .cart-remove:hover {
+      color: #e74c3c;
+    }
+
+    .cart-summary {
+      background: white;
+      border-radius: var(--radius);
+      padding: 32px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .cart-summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--green-foam);
+      color: var(--text-mid);
+      font-size: 0.9rem;
+    }
+
+    .cart-summary-total {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--green-deep);
+    }
+
+    .btn-checkout {
+      width: 100%;
+      background: var(--green-deep);
+      color: white;
+      padding: 16px;
+      border-radius: 50px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      transition: var(--transition);
+      text-align: center;
+    }
+
+    .btn-checkout:hover {
+      background: var(--green-bright);
+    }
+
+    .cart-empty {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .cart-empty-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .cart-empty h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.5rem;
+      color: var(--green-deep);
+      margin-bottom: 12px;
+    }
+
+    .cart-empty p {
+      color: var(--text-light);
+      margin-bottom: 32px;
+    }
+
+    /* ===== CHECKOUT PAGE ===== */
+    .checkout-container {
+      max-width: 800px;
+      margin: 60px auto;
+      padding: 0 5%;
+    }
+
+    .checkout-container h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--green-deep);
+      margin-bottom: 40px;
+    }
+
+    .checkout-form {
+      background: white;
+      border-radius: var(--radius);
+      padding: 40px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--text-mid);
+      margin-bottom: 8px;
+      letter-spacing: 0.04em;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--green-pale);
+      background: var(--green-foam);
+      font-family: inherit;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      transition: border-color 0.2s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--green-bright);
+      background: white;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .payment-methods {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .payment-option {
+      border: 1.5px solid var(--green-pale);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      text-align: center;
+      cursor: pointer;
+      transition: var(--transition);
+      font-size: 0.82rem;
+      color: var(--text-mid);
+    }
+
+    .payment-option.selected {
+      border-color: var(--green-bright);
+      background: var(--green-mist);
+      color: var(--green-deep);
+    }
+
+    .checkout-success {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .checkout-success .success-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    /* ===== ABOUT PAGE ===== */
+    .about-hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, var(--green-foam) 0%, var(--green-mist) 100%);
+      padding: 80px 5%;
+    }
+
+    .about-hero-content {
+      max-width: 640px;
+    }
+
+    .about-hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 300;
+      color: var(--green-deep);
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+
+    .about-hero p {
+      color: var(--text-mid);
+      font-size: 1.05rem;
+      line-height: 1.9;
+      margin-bottom: 36px;
+    }
+
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+      padding: 60px 5%;
+      background: white;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2.8rem;
+      color: var(--green-bright);
+      font-weight: 300;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    .about-story {
+      padding: 80px 5%;
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .about-story-text h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 2rem;
+      font-weight: 300;
+      color: var(--green-deep);
+      margin-bottom: 20px;
+    }
+
+    .about-story-text p {
+      color: var(--text-mid);
+      line-height: 1.9;
+      margin-bottom: 16px;
+    }
+
+    .about-img-block {
+      border-radius: 32px;
+      overflow: hidden;
+      background: var(--green-mist);
+      aspect-ratio: 4/5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 6rem;
+    }
+
+    .team-grid {
+      padding: 60px 5%;
+      background: var(--green-foam);
+    }
+
+    .team-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .team-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      text-align: center;
+    }
+
+    .team-card-img {
+      aspect-ratio: 1;
+      background: var(--green-mist);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .team-card-info {
+      padding: 20px;
+    }
+
+    .team-card-name {
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-bottom: 4px;
+    }
+
+    .team-card-role {
+      font-size: 0.8rem;
+      color: var(--text-light);
+    }
+
+    /* ===== TOAST ===== */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 5000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .toast {
+      background: var(--green-deep);
+      color: white;
+      padding: 14px 20px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-card);
+      animation: slideInToast 0.3s ease;
+      max-width: 300px;
+    }
+
+    @keyframes slideInToast {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* ===== AI SCAN RESULT MODAL ===== */
+    #ai-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 500;
+      background: rgba(10, 20, 15, 0.85);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    #ai-modal.open {
+      display: flex;
+    }
+
+    .ai-modal-box {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .ai-modal-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.6rem;
+      color: var(--green-deep);
+      margin-bottom: 8px;
+    }
+
+    .ai-modal-box .ai-analysis {
+      background: var(--green-foam);
+      border-radius: var(--radius-sm);
+      padding: 20px;
+      margin: 20px 0;
+      font-size: 0.88rem;
+      color: var(--text-mid);
+      line-height: 1.8;
+    }
+
+    .ai-modal-products {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .ai-modal-close {
+      margin-top: 24px;
+      width: 100%;
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+
+      .nav-links.open {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: white;
+        padding: 20px 5%;
+        box-shadow: var(--shadow-card);
+        z-index: 99;
+      }
+
+      .hamburger {
+        display: flex;
+      }
+
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero-visual {
+        order: -1;
+      }
+
+      .hero-img-wrap {
+        max-height: 320px;
+      }
+
+      .hero-floating-badge {
+        left: 12px;
+        bottom: 12px;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .product-detail-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .about-story {
+        grid-template-columns: 1fr;
+      }
+
+      .about-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .payment-methods {
+        grid-template-columns: 1fr;
+      }
+
+      #ai-reco-section {
+        padding: 28px 24px;
+      }
+
+      .checkout-form {
+        padding: 24px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      nav {
+        padding: 0 4%;
+      }
+
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        gap: 12px;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ===== LOADING SCREEN ===== -->
+  <div id="loading-screen">
+    <div class="loading-logo">CellVany</div>
+    <div class="loading-bar-wrap">
+      <div class="loading-bar"></div>
+    </div>
+    <div class="loading-text">ĐANG TẢI SẢN PHẨM...</div>
+  </div>
+
+  <!-- ===== FACE SCAN OVERLAY ===== -->
+  <div id="face-scan-overlay" style="display:none;">
+    <h2>Phân tích da của bạn</h2>
+    <p>Chúng tôi sẽ dùng AI để gợi ý sản phẩm phù hợp nhất với làn da của bạn</p>
+    <div class="camera-frame">
+      <video id="camera-video" autoplay playsinline muted></video>
+      <canvas id="camera-canvas" style="display:none;"></canvas>
+      <div class="scan-ring"></div>
+      <div class="scan-ring-2"></div>
+      <div class="scan-corners">
+        <div class="scan-line"></div>
+      </div>
+    </div>
+    <div id="scan-result-msg"></div>
+    <button class="btn-capture" id="btn-capture" title="Chụp ảnh">
+      <svg viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="8" />
+      </svg>
+    </button>
+    <button class="btn-skip-scan" id="btn-skip-scan">Bỏ qua, vào trang chủ →</button>
+  </div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav id="navbar" style="display:none;">
+    <div class="nav-logo" onclick="navigate('home')">Cell<span>Vany</span></div>
+    <div class="nav-links" id="nav-links">
+      <a onclick="navigate('home')">Trang chủ</a>
+      <a onclick="navigate('home'); setTimeout(()=>scrollToProducts(),300)">Sản phẩm</a>
+      <a onclick="navigate('about')">Về chúng tôi</a>
+      <a
+        onclick="navigate('home'); setTimeout(()=>document.getElementById('testimonials').scrollIntoView({behavior:'smooth'}),300)">Đánh
+        giá</a>
+    </div>
+    <div class="nav-actions">
+      <button class="cart-btn" onclick="navigate('cart')">
+        <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <path d="M16 10a4 4 0 01-8 0" />
+        </svg>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+      <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ===== PAGES ===== -->
+
+  <!-- HOME PAGE -->
+  <div id="page-home" class="page">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">100% Thuần Chay & Không Thử Nghiệm Trên Động Vật</div>
+        <h1>Vẻ đẹp từ <em>thiên nhiên</em>,<br>sức mạnh từ khoa học</h1>
+        <p class="hero-desc">CellVany mang đến dòng mỹ phẩm thuần chay cao cấp được nghiên cứu kỹ lưỡng, phù hợp với mọi
+          loại da – nuôi dưỡng làn da khoẻ mạnh theo cách bền vững nhất.</p>
+        <div class="hero-actions">
+          <button class="btn-primary" onclick="scrollToProducts()">Khám phá sản phẩm</button>
+          <button class="btn-outline" onclick="navigate('about')">Về CellVany</button>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-img-wrap">
+          <div class="hero-img-placeholder">
+            <span class="leaf-icon">🌿</span>
+            <span>CellVany Beauty</span>
+          </div>
+        </div>
+        <div class="hero-floating-badge">
+          <div class="icon">🌱</div>
+          <div>
+            <strong>100% Vegan</strong>
+            <span>Không cruelty-free</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Recommendations -->
+    <div id="ai-reco-section">
+      <h3>✨ Gợi ý riêng cho bạn</h3>
+      <p id="ai-reco-text">Dựa trên phân tích làn da của bạn, chúng tôi đề xuất:</p>
+      <div class="ai-reco-products" id="ai-reco-products"></div>
+    </div>
+
+    <!-- Products -->
+    <section id="products-section">
+      <div class="section-header">
+        <div class="section-label">Bộ sưu tập</div>
+        <h2>Sản phẩm nổi bật</h2>
+        <p>Được chiết xuất từ nguyên liệu thực vật thuần khiết, lành tính với da và hành tinh</p>
+      </div>
+      <div class="products-grid" id="products-grid">
+        <div class="products-loading">
+          <div class="spinner"></div>
+          Đang tải sản phẩm...
+        </div>
+      </div>
+    </section>
+
+    <!-- Values -->
+    <section style="background: var(--green-foam);">
+      <div class="section-header">
+        <div class="section-label">Cam kết</div>
+        <h2>Tại sao chọn CellVany?</h2>
+      </div>
+      <div class="values-grid">
+        <div class="value-card">
+          <div class="value-icon">🌱</div>
+          <h4>100% Thuần Chay</h4>
+          <p>Tất cả sản phẩm không chứa bất kỳ thành phần có nguồn gốc động vật và không thử nghiệm trên động vật.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🔬</div>
+          <h4>Nghiên cứu khoa học</h4>
+          <p>Được phát triển bởi đội ngũ chuyên gia da liễu với công thức độc quyền, hiệu quả lâm sàng được chứng minh.
+          </p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">♻️</div>
+          <h4>Bao bì bền vững</h4>
+          <p>Chúng tôi sử dụng bao bì tái chế 100% và cam kết giảm thiểu lượng nhựa trong sản xuất.</p>
+        </div>
+        <div class="value-card">
+          <div class="value-icon">🤍</div>
+          <h4>Phù hợp da nhạy cảm</h4>
+          <p>Không hương liệu nhân tạo, không paraben, không sulfate – an toàn cho mọi loại da kể cả nhạy cảm.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials">
+      <div class="section-header">
+        <div class="section-label">Khách hàng nói gì</div>
+        <h2>Câu chuyện từ cộng đồng</h2>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Sau 3 tuần dùng serum CellVany, da tôi thực sự sáng và ẩm hơn rất nhiều. Tôi rất
+            ngạc nhiên khi sản phẩm thuần chay lại hiệu quả đến vậy!"</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">👩</div>
+            <div>
+              <div class="author-name">Nguyễn Thị Lan</div>
+              <div class="author-location">TP. Hồ Chí Minh</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★★</div>
+          <p class="testimonial-text">"Mình có da nhạy cảm và hay bị kích ứng với mỹ phẩm thông thường. CellVany là lần
+            đầu tiên mình dùng sản phẩm mà không lo ngại gì cả."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🧖</div>
+            <div>
+              <div class="author-name">Trần Minh Châu</div>
+              <div class="author-location">Hà Nội</div>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="stars">★★★★☆</div>
+          <p class="testimonial-text">"Rất thích tinh thần của thương hiệu. Mua hàng ủng hộ luôn! Sản phẩm chất lượng,
+            đóng gói đẹp và thân thiện môi trường."</p>
+          <div class="testimonial-author">
+            <div class="author-avatar">🌸</div>
+            <div>
+              <div class="author-name">Phạm Quỳnh Anh</div>
+              <div class="author-location">Đà Nẵng</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <div class="cta-banner">
+      <h2>Bắt đầu hành trình làm đẹp<br>thuần chay của bạn</h2>
+      <p>Đăng ký nhận bản tin để nhận ưu đãi 15% cho đơn hàng đầu tiên và tips chăm sóc da từ chuyên gia.</p>
+      <button class="btn-cta-white" onclick="showToast('🎉 Cảm ơn! Kiểm tra email của bạn.')">Đăng ký ngay</button>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <div class="nav-logo">Cell<span style="color:var(--green-light)">Vany</span></div>
+          <p>Mỹ phẩm thuần chay cao cấp. Vẻ đẹp không đánh đổi với lương tâm và hành tinh.</p>
+        </div>
+        <div class="footer-col">
+          <h5>Sản phẩm</h5>
+          <a onclick="scrollToProducts()">Tất cả sản phẩm</a>
+          <a>Serum & Tinh chất</a>
+          <a>Kem dưỡng</a>
+          <a>Làm sạch</a>
+        </div>
+        <div class="footer-col">
+          <h5>Thương hiệu</h5>
+          <a onclick="navigate('about')">Về chúng tôi</a>
+          <a>Cam kết bền vững</a>
+          <a>Blog làm đẹp</a>
+          <a>Liên hệ</a>
+        </div>
+        <div class="footer-col">
+          <h5>Hỗ trợ</h5>
+          <a>Chính sách đổi trả</a>
+          <a>Hướng dẫn mua hàng</a>
+          <a>FAQ</a>
+          <a>Theo dõi đơn hàng</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© 2025 CellVany. Mọi quyền được bảo lưu.</span>
+        <span>🌿 Thuần Chay • Bền Vững • Yêu Thương</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- PRODUCT DETAIL PAGE -->
+  <div id="page-product" class="page">
+    <nav style="display:block;" id="detail-nav"></nav>
+    <div class="product-detail-container">
+      <button class="back-btn" onclick="navigate('home')">← Quay lại</button>
+      <div class="product-detail-grid" id="product-detail-content"></div>
+    </div>
+  </div>
+
+  <!-- CART PAGE -->
+  <div id="page-cart" class="page">
+    <div class="cart-container">
+      <button class="back-btn" onclick="navigate('home')" style="margin-top:30px;">← Tiếp tục mua sắm</button>
+      <h1>Giỏ hàng của bạn</h1>
+      <div id="cart-content"></div>
+    </div>
+  </div>
+
+  <!-- CHECKOUT PAGE -->
+  <div id="page-checkout" class="page">
+    <div class="checkout-container">
+      <button class="back-btn" onclick="navigate('cart')" style="margin-top:30px;">← Quay lại giỏ hàng</button>
+      <h1>Thanh toán</h1>
+      <div id="checkout-content"></div>
+    </div>
+  </div>
+
+  <!-- ABOUT PAGE -->
+  <div id="page-about" class="page">
+    <div class="about-hero">
+      <div class="about-hero-content">
+        <div class="section-label">Câu chuyện của chúng tôi</div>
+        <h1>Vẻ đẹp thuần khiết<br>từ trái tim người Việt</h1>
+        <p>CellVany được thành lập với niềm tin rằng mỹ phẩm tốt không cần phải đánh đổi sức khoẻ, đạo đức hay môi
+          trường. Chúng tôi tạo ra những sản phẩm mà bạn có thể tự hào khi sử dụng.</p>
+        <button class="btn-primary" onclick="scrollToProducts(); navigate('home')">Xem sản phẩm</button>
+      </div>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-number">50+</div>
+        <div class="stat-label">Sản phẩm thuần chay</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">10K+</div>
+        <div class="stat-label">Khách hàng tin yêu</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">Không thử nghiệm trên động vật</div>
+      </div>
+    </div>
+    <div style="max-width:1100px;margin:0 auto;">
+      <div class="about-story">
+        <div class="about-story-text">
+          <h2>Bắt đầu từ một câu hỏi đơn giản</h2>
+          <p>Năm 2021, nhà sáng lập CellVany – sau nhiều năm làm việc trong ngành dược và bị kích ứng da bởi hầu hết mỹ
+            phẩm thông thường – đã tự hỏi: Tại sao không có sản phẩm vừa hiệu quả, vừa hoàn toàn lành tính?</p>
+          <p>Từ đó, nhóm nghiên cứu đã dành 2 năm phát triển công thức kết hợp tinh chất thực vật Việt Nam với công nghệ
+            sinh học hiện đại – tạo nên CellVany.</p>
+          <p>Mỗi sản phẩm đều được kiểm nghiệm nghiêm ngặt, đạt chứng nhận vegan quốc tế và không chứa bất kỳ thành phần
+            có hại nào.</p>
+        </div>
+        <div class="about-img-block">🌿</div>
+      </div>
+    </div>
+    <div class="team-grid">
+      <div style="max-width:1100px;margin:0 auto;">
+        <div class="section-header">
+          <div class="section-label">Đội ngũ</div>
+          <h2>Những người tạo nên CellVany</h2>
+        </div>
+        <div class="team-cards">
+          <div class="team-card">
+            <div class="team-card-img">👩‍🔬</div>
+            <div class="team-card-info">
+              <div class="team-card-name">TS. Minh Thư</div>
+              <div class="team-card-role">Nhà sáng lập & Giám đốc R&D</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-img">🧑‍⚕️</div>
+            <div class="team-card-info">
+              <div class="team-card-name">BS. Hoàng Nam</div>
+              <div class="team-card-role">Chuyên gia Da liễu</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-img">👩‍🌾</div>
+            <div class="team-card-info">
+              <div class="team-card-name">Ngọc Hà</div>
+              <div class="team-card-role">Giám đốc Bền vững</div>
+            </div>
+          </div>
+          <div class="team-card">
+            <div class="team-card-img">🧑‍🎨</div>
+            <div class="team-card-info">
+              <div class="team-card-name">Văn Khoa</div>
+              <div class="team-card-role">Creative Director</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cta-banner">
+      <h2>Cùng chúng tôi thay đổi<br>ngành làm đẹp</h2>
+      <p>Mỗi sản phẩm bạn chọn là một lá phiếu cho thế giới tốt đẹp hơn.</p>
+      <button class="btn-cta-white" onclick="navigate('home'); setTimeout(scrollToProducts, 300)">Mua ngay</button>
+    </div>
+    <footer>
+      <div class="footer-bottom" style="border:none;justify-content:center;">
+        <span>© 2025 CellVany. 🌿 Thuần Chay • Bền Vững</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- AI Modal -->
+  <div id="ai-modal">
+    <div class="ai-modal-box">
+      <h3>✨ Kết quả phân tích da</h3>
+      <p style="color:var(--text-light);font-size:0.85rem;">Gemini AI đã phân tích làn da của bạn</p>
+      <div class="ai-analysis" id="ai-analysis-text">Đang phân tích...</div>
+      <h4 style="font-family:'Cormorant Garamond',serif;color:var(--green-deep);margin-bottom:12px;">Sản phẩm gợi ý cho
+        bạn:</h4>
+      <div class="ai-modal-products" id="ai-modal-products"></div>
+      <button class="btn-primary btn-add-cart-large ai-modal-close" onclick="closeAiModal()">Tuyệt vời, xem tất cả sản
+        phẩm</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <script>
+    // ============================================================
+    // CONFIG — ĐIỀN API KEYS VÀO ĐÂY
+    // ============================================================
+    const CONFIG = {
+      GOOGLE_SHEET_ID: '1axXpfJTQD_mO-MMw3RH2nZdqXhHNt95stTRO1oTub7k',
+      GOOGLE_API_KEY: 'AIzaSyAp2OY7DfRa59D51WiSuwNIDduC3Zpa4Nw',
+      GEMINI_API_KEY: 'AIzaSyBkuilRN5HDd9F3IFY7y60Ar1pa_1IooYM',
+      // Tên cột trong Google Sheet (hàng đầu tiên)
+      SHEET_RANGE: 'Sheet1!A1:Z100',
+    };
+
+    // ============================================================
+    // MOCK DATA — dùng khi chưa có API key hoặc Google Sheet
+    // ============================================================
+    const MOCK_PRODUCTS = [
+      { id: '1', name: 'Serum Vitamin C Thuần Chay', category: 'Serum', price: '680.000đ', priceNum: 680000, desc: 'Làm sáng da và giảm thâm nám với 15% Vitamin C ổn định từ chiết xuất cam bergamot. Phù hợp da dầu và da hỗn hợp.', tags: ['Làm sáng', 'Chống oxy hoá', 'Mọi loại da'], ingredients: 'Ascorbyl Glucoside, Niacinamide, Hyaluronic Acid, Aloe Vera, Green Tea Extract', emoji: '🍊' },
+      { id: '2', name: 'Kem Dưỡng Ẩm Hoa Hồng Tầm Xuân', category: 'Kem dưỡng', price: '550.000đ', priceNum: 550000, desc: 'Nuôi dưỡng và làm mềm da suốt 24 giờ với tinh dầu hoa hồng tầm xuân và bơ shea hữu cơ. An toàn cho da nhạy cảm.', tags: ['Dưỡng ẩm', 'Da nhạy cảm', 'Chống lão hoá'], ingredients: 'Rosa Canina Oil, Shea Butter, Jojoba Oil, Ceramide (plant-derived), Vitamin E', emoji: '🌹' },
+      { id: '3', name: 'Sữa Rửa Mặt Rau Má', category: 'Làm sạch', price: '320.000đ', priceNum: 320000, desc: 'Làm sạch nhẹ nhàng và làm dịu da với chiết xuất rau má Việt Nam. Không tạo bọt, giữ ẩm tối ưu sau khi rửa.', tags: ['Làm sạch', 'Làm dịu', 'Không sulfate'], ingredients: 'Centella Asiatica Extract, Glycerin, Panthenol, Aloe Vera, Coconut Derived Cleansers', emoji: '🌿' },
+      { id: '4', name: 'Toner Cân Bằng Trà Xanh', category: 'Toner', price: '290.000đ', priceNum: 290000, desc: 'Cân bằng pH và thu nhỏ lỗ chân lông với nước chiết xuất trà xanh và chất chống oxy hoá tự nhiên. Dạng xịt tiện lợi.', tags: ['Cân bằng pH', 'Kiểm soát dầu', 'Chống oxy hoá'], ingredients: 'Green Tea Water, Niacinamide, Witch Hazel (alcohol-free), Panthenol, Hyaluronic Acid', emoji: '🍵' },
+      { id: '5', name: 'Mặt Nạ Đất Sét Nghệ', category: 'Mặt nạ', price: '420.000đ', priceNum: 420000, desc: 'Làm sạch sâu lỗ chân lông và làm sáng da với đất sét kaolin và tinh bột nghệ Ấn Độ. Dùng 1-2 lần/tuần.', tags: ['Làm sạch sâu', 'Làm sáng', 'Da dầu mụn'], ingredients: 'Kaolin Clay, Turmeric Extract, Bentonite, Rose Hip Oil, Vitamin C', emoji: '✨' },
+      { id: '6', name: 'Tinh Chất Phục Hồi Aloe Vera', category: 'Serum', price: '480.000đ', priceNum: 480000, desc: 'Phục hồi và làm dịu da tức thì với 95% nha đam hữu cơ nguyên chất. Lý tưởng cho da sau khi tiếp xúc ánh nắng.', tags: ['Phục hồi', 'Làm dịu', 'Sau nắng'], ingredients: 'Aloe Barbadensis Leaf Juice (95%), Centella Asiatica, Allantoin, Panthenol', emoji: '🌵' },
+      { id: '7', name: 'Kem Chống Nắng Zinc Oxide SPF50', category: 'Chống nắng', price: '390.000đ', priceNum: 390000, desc: 'Bảo vệ da toàn diện với zinc oxide khoáng chất thuần chay. Không để lại vệt trắng, phù hợp cả ngày dài.', tags: ['SPF50', 'Khoáng chất', 'Không để lại vệt'], ingredients: 'Zinc Oxide (20%), Niacinamide, Hyaluronic Acid, Aloe Vera, Chamomile Extract', emoji: '☀️' },
+      { id: '8', name: 'Dầu Dưỡng Tóc Argan Thuần Chay', category: 'Chăm sóc tóc', price: '350.000đ', priceNum: 350000, desc: 'Dưỡng bóng và phục hồi tóc hư tổn với dầu argan Morocco và dầu dừa hữu cơ. Nhẹ, không nhờn.', tags: ['Phục hồi tóc', 'Dưỡng bóng', 'Không nhờn'], ingredients: 'Argania Spinosa (Argan) Oil, Cocos Nucifera Oil, Vitamin E, Sunflower Oil', emoji: '💆' },
+    ];
+
+    // ============================================================
+    // STATE
+    // ============================================================
+    let allProducts = [];
+    let cart = JSON.parse(localStorage.getItem('cellvany_cart') || '[]');
+    let aiRecommendedIds = [];
+    let cameraStream = null;
+    let capturedImageBase64 = null;
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    window.addEventListener('DOMContentLoaded', async () => {
+      // Show loading
+      await loadProducts();
+
+      // Hide loading after 2s
+      setTimeout(() => {
+        const ls = document.getElementById('loading-screen');
+        ls.classList.add('fade-out');
+        setTimeout(() => {
+          ls.style.display = 'none';
+          startFaceScan();
+        }, 600);
+      }, 2000);
+
+      updateCartUI();
+    });
+
+    // ============================================================
+    // LOAD PRODUCTS
+    // ============================================================
+    async function loadProducts() {
+      try {
+        if (CONFIG.GOOGLE_SHEET_ID === 'YOUR_GOOGLE_SHEET_ID_HERE') {
+          throw new Error('Using mock data');
+        }
+        const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.GOOGLE_SHEET_ID}/values/${CONFIG.SHEET_RANGE}?key=${CONFIG.GOOGLE_API_KEY}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error('Sheet fetch failed');
+        const data = await res.json();
+        const rows = data.values || [];
+        const headers = rows[0].map(h => h.toLowerCase().trim());
+        allProducts = rows.slice(1).map((row, i) => {
+          const obj = { id: String(i + 1) };
+          headers.forEach((h, j) => { obj[h] = row[j] || ''; });
+          // normalize
+          obj.name = obj.name || obj['tên sản phẩm'] || obj['ten san pham'] || 'Sản phẩm';
+          obj.price = obj.price || obj['giá'] || obj['gia'] || '0đ';
+          obj.priceNum = parseInt((obj.price || '').replace(/\D/g, '')) || 0;
+          obj.desc = obj.desc || obj['mô tả'] || obj['mo ta'] || '';
+          obj.category = obj.category || obj['danh mục'] || obj['danh muc'] || '';
+          obj.tags = (obj.tags || '').split(',').map(t => t.trim()).filter(Boolean);
+          obj.image = obj.image || obj['hình ảnh'] || obj['hinh anh'] || '';
+          obj.ingredients = obj.ingredients || obj['thành phần'] || '';
+          obj.emoji = obj.emoji || '🌿';
+          return obj;
+        });
+      } catch (e) {
+        allProducts = MOCK_PRODUCTS;
+      }
+      localStorage.setItem('cellvany_products', JSON.stringify(allProducts));
+    }
+
+    // ============================================================
+    // NAVIGATION
+    // ============================================================
+    function navigate(page, data) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const navbar = document.getElementById('navbar');
+
+      if (page === 'home') {
+        document.getElementById('page-home').classList.add('active');
+        navbar.style.display = 'flex';
+        renderProducts(allProducts);
+        window.scrollTo(0, 0);
+      } else if (page === 'product' && data) {
+        document.getElementById('page-product').classList.add('active');
+        navbar.style.display = 'flex';
+        renderProductDetail(data);
+        window.scrollTo(0, 0);
+      } else if (page === 'cart') {
+        document.getElementById('page-cart').classList.add('active');
+        navbar.style.display = 'flex';
+        renderCart();
+        window.scrollTo(0, 0);
+      } else if (page === 'checkout') {
+        document.getElementById('page-checkout').classList.add('active');
+        navbar.style.display = 'flex';
+        renderCheckout();
+        window.scrollTo(0, 0);
+      } else if (page === 'about') {
+        document.getElementById('page-about').classList.add('active');
+        navbar.style.display = 'flex';
+        window.scrollTo(0, 0);
+      }
+    }
+
+    function scrollToProducts() {
+      const el = document.getElementById('products-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function toggleMobileMenu() {
+      document.getElementById('nav-links').classList.toggle('open');
+    }
+
+    // ============================================================
+    // RENDER PRODUCTS
+    // ============================================================
+    function renderProducts(products, container = 'products-grid') {
+      const grid = document.getElementById(container);
+      if (!grid) return;
+      if (!products || !products.length) {
+        grid.innerHTML = '<div class="products-loading">Không có sản phẩm nào.</div>';
+        return;
+      }
+      grid.innerHTML = products.map(p => productCardHTML(p)).join('');
+    }
+
+    function productCardHTML(p, dark = false) {
+      const imgHTML = p.image
+        ? `<img src="${p.image}" alt="${p.name}" loading="lazy">`
+        : `<div class="product-img-placeholder">${p.emoji || '🌿'}</div>`;
+      return `
+    <div class="product-card" onclick="navigate('product', ${JSON.stringify(p).replace(/"/g, '&quot;')})">
+      <div class="product-img">
+        ${imgHTML}
+        <span class="product-badge-vegan">🌱 Vegan</span>
+      </div>
+      <div class="product-info">
+        <div class="product-category">${p.category}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-desc">${(p.desc || '').substring(0, 80)}${(p.desc || '').length > 80 ? '...' : ''}</div>
+        <div class="product-footer">
+          <span class="product-price">${p.price}</span>
+          <button class="btn-add-cart" onclick="event.stopPropagation(); addToCart('${p.id}')">+ Thêm</button>
+        </div>
+      </div>
+    </div>`;
+    }
+
+    // ============================================================
+    // PRODUCT DETAIL
+    // ============================================================
+    function renderProductDetail(p) {
+      const imgHTML = p.image
+        ? `<img src="${p.image}" alt="${p.name}">`
+        : `<span style="font-size:5rem;">${p.emoji || '🌿'}</span>`;
+      const tagsHTML = (p.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+      document.getElementById('product-detail-content').innerHTML = `
+    <div class="detail-img-wrap">${imgHTML}</div>
+    <div class="detail-info">
+      <div class="detail-category">${p.category}</div>
+      <h1 class="detail-name">${p.name}</h1>
+      <div class="detail-price">${p.price}</div>
+      <p class="detail-desc">${p.desc}</p>
+      <div class="detail-tags">${tagsHTML}</div>
+      <div class="detail-actions">
+        <button class="btn-add-cart-large" onclick="addToCart('${p.id}'); showToast('✅ Đã thêm vào giỏ!')">🛒 Thêm vào giỏ hàng</button>
+        <button class="btn-outline" onclick="addToCart('${p.id}'); navigate('cart')" style="flex:0.6;padding:16px 20px;border-radius:50px;font-size:0.88rem;font-weight:500;border:1.5px solid var(--green-bright);color:var(--green-bright);transition:var(--transition);">Mua ngay</button>
+      </div>
+      ${p.ingredients ? `<div class="detail-ingredients"><h4>Thành phần chính</h4><p>${p.ingredients}</p></div>` : ''}
+    </div>`;
+    }
+
+    // ============================================================
+    // CART
+    // ============================================================
+    function addToCart(productId) {
+      const product = allProducts.find(p => p.id === productId);
+      if (!product) return;
+      const existing = cart.find(i => i.id === productId);
+      if (existing) existing.qty++;
+      else cart.push({ ...product, qty: 1 });
+      saveCart();
+      updateCartUI();
+      showToast(`✅ Đã thêm "${product.name}" vào giỏ!`);
+    }
+
+    function removeFromCart(productId) {
+      cart = cart.filter(i => i.id !== productId);
+      saveCart(); updateCartUI(); renderCart();
+    }
+
+    function updateQty(productId, delta) {
+      const item = cart.find(i => i.id === productId);
+      if (!item) return;
+      item.qty = Math.max(1, item.qty + delta);
+      saveCart(); updateCartUI(); renderCart();
+    }
+
+    function saveCart() { localStorage.setItem('cellvany_cart', JSON.stringify(cart)); }
+
+    function updateCartUI() {
+      const total = cart.reduce((s, i) => s + i.qty, 0);
+      const countEl = document.getElementById('cart-count');
+      if (countEl) { countEl.textContent = total; countEl.classList.toggle('show', total > 0); }
+    }
+
+    function renderCart() {
+      const el = document.getElementById('cart-content');
+      if (!el) return;
+      if (!cart.length) {
+        el.innerHTML = `<div class="cart-empty"><div class="cart-empty-icon">🛒</div><h3>Giỏ hàng trống</h3><p>Hãy khám phá các sản phẩm của CellVany nhé!</p><button class="btn-primary" onclick="navigate('home')">Mua sắm ngay</button></div>`;
+        return;
+      }
+      const subtotal = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+      const shipping = subtotal > 500000 ? 0 : 30000;
+      const total = subtotal + shipping;
+      const fmt = n => n.toLocaleString('vi-VN') + 'đ';
+      el.innerHTML = `
+    <div class="cart-items">
+      ${cart.map(item => {
+        const imgHTML = item.image ? `<img src="${item.image}" alt="${item.name}">` : item.emoji || '🌿';
+        return `<div class="cart-item">
+          <div class="cart-item-img">${item.image ? `<img src="${item.image}">` : item.emoji || '🌿'}</div>
+          <div class="cart-item-info">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-price">${item.price}</div>
+          </div>
+          <div class="cart-qty">
+            <button class="qty-btn" onclick="updateQty('${item.id}',-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty('${item.id}',1)">+</button>
+          </div>
+          <div class="cart-item-total">${fmt(item.priceNum * item.qty)}</div>
+          <button class="cart-remove" onclick="removeFromCart('${item.id}')">✕</button>
+        </div>`;
+      }).join('')}
+    </div>
+    <div class="cart-summary">
+      <div class="cart-summary-row"><span>Tạm tính</span><span>${fmt(subtotal)}</span></div>
+      <div class="cart-summary-row"><span>Phí vận chuyển</span><span>${shipping === 0 ? 'Miễn phí' : fmt(shipping)}</span></div>
+      ${subtotal < 500000 ? `<div style="font-size:0.78rem;color:var(--green-bright);padding:8px 0;">Mua thêm ${fmt(500000 - subtotal)} để miễn phí vận chuyển!</div>` : ''}
+      <div class="cart-summary-total"><span>Tổng cộng</span><span>${fmt(total)}</span></div>
+      <button class="btn-checkout" onclick="navigate('checkout')">Tiến hành thanh toán →</button>
+    </div>`;
+    }
+
+    // ============================================================
+    // CHECKOUT
+    // ============================================================
+    function renderCheckout() {
+      const el = document.getElementById('checkout-content');
+      if (!el) return;
+      const subtotal = cart.reduce((s, i) => s + i.priceNum * i.qty, 0);
+      const shipping = subtotal > 500000 ? 0 : 30000;
+      const total = subtotal + shipping;
+      const fmt = n => n.toLocaleString('vi-VN') + 'đ';
+      el.innerHTML = `
+    <div class="checkout-form">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--green-deep);margin-bottom:28px;">Thông tin giao hàng</h3>
+      <div class="form-row">
+        <div class="form-group"><label>Họ tên *</label><input type="text" placeholder="Nguyễn Thị Lan" id="co-name"></div>
+        <div class="form-group"><label>Số điện thoại *</label><input type="tel" placeholder="0901 234 567" id="co-phone"></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="email@example.com" id="co-email"></div>
+      <div class="form-group"><label>Địa chỉ *</label><input type="text" placeholder="Số nhà, tên đường" id="co-address"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Tỉnh/Thành phố</label><select id="co-city"><option>TP. Hồ Chí Minh</option><option>Hà Nội</option><option>Đà Nẵng</option><option>Cần Thơ</option><option>Khác</option></select></div>
+        <div class="form-group"><label>Ghi chú</label><input type="text" placeholder="Giao giờ hành chính..." id="co-note"></div>
+      </div>
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.3rem;color:var(--green-deep);margin:28px 0 16px;">Phương thức thanh toán</h3>
+      <div class="payment-methods" id="payment-methods">
+        <div class="payment-option selected" onclick="selectPayment(this)">💳 Thẻ ngân hàng</div>
+        <div class="payment-option" onclick="selectPayment(this)">📱 MoMo / ZaloPay</div>
+        <div class="payment-option" onclick="selectPayment(this)">💵 COD</div>
+      </div>
+      <div style="background:var(--green-foam);border-radius:var(--radius-sm);padding:20px;margin:28px 0;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.9rem;color:var(--text-mid);"><span>Tổng đơn hàng</span><span>${fmt(subtotal)}</span></div>
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;font-size:0.9rem;color:var(--text-mid);"><span>Phí vận chuyển</span><span>${shipping === 0 ? 'Miễn phí' : fmt(shipping)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-weight:600;font-size:1rem;color:var(--green-deep);padding-top:12px;border-top:1px solid var(--green-pale);"><span>Tổng thanh toán</span><span>${fmt(total)}</span></div>
+      </div>
+      <button class="btn-checkout" onclick="placeOrder()">Đặt hàng – ${fmt(total)}</button>
+    </div>`;
+    }
+
+    function selectPayment(el) {
+      document.querySelectorAll('.payment-option').forEach(o => o.classList.remove('selected'));
+      el.classList.add('selected');
+    }
+
+    function placeOrder() {
+      const name = document.getElementById('co-name')?.value;
+      const phone = document.getElementById('co-phone')?.value;
+      const address = document.getElementById('co-address')?.value;
+      if (!name || !phone || !address) { showToast('⚠️ Vui lòng điền đầy đủ thông tin bắt buộc!'); return; }
+      cart = []; saveCart(); updateCartUI();
+      document.getElementById('checkout-content').innerHTML = `
+    <div class="checkout-success">
+      <div class="success-icon">🎉</div>
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:2rem;color:var(--green-deep);margin-bottom:12px;">Đặt hàng thành công!</h2>
+      <p style="color:var(--text-light);max-width:400px;margin:0 auto 32px;">Cảm ơn <strong>${name}</strong>! Đơn hàng của bạn đã được xác nhận. Chúng tôi sẽ liên hệ qua số <strong>${phone}</strong> trong vòng 30 phút.</p>
+      <button class="btn-primary" onclick="navigate('home')">Tiếp tục mua sắm</button>
+    </div>`;
+    }
+
+    // ============================================================
+    // FACE SCAN + GEMINI AI
+    // ============================================================
+    async function startFaceScan() {
+      const overlay = document.getElementById('face-scan-overlay');
+      overlay.style.display = 'flex';
+
+      try {
+        cameraStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: 640, height: 640 } });
+        document.getElementById('camera-video').srcObject = cameraStream;
+      } catch (e) {
+        document.getElementById('scan-result-msg').textContent = '⚠️ Không thể mở camera. Bấm "Bỏ qua" để tiếp tục.';
+      }
+
+      document.getElementById('btn-capture').addEventListener('click', captureAndAnalyze);
+      document.getElementById('btn-skip-scan').addEventListener('click', closeScan);
+    }
+
+    async function captureAndAnalyze() {
+      const video = document.getElementById('camera-video');
+      const canvas = document.getElementById('camera-canvas');
+      const msg = document.getElementById('scan-result-msg');
+      const btn = document.getElementById('btn-capture');
+
+      if (!cameraStream || video.readyState < 2) { msg.textContent = '⚠️ Camera chưa sẵn sàng.'; return; }
+
+      canvas.width = video.videoWidth || 640;
+      canvas.height = video.videoHeight || 640;
+      canvas.getContext('2d').drawImage(video, 0, 0);
+      capturedImageBase64 = canvas.toDataURL('image/jpeg', 0.8).split(',')[1];
+
+      btn.style.pointerEvents = 'none'; btn.style.opacity = '0.5';
+      msg.textContent = '🔍 Đang phân tích làn da với Gemini AI...';
+
+      try {
+        await analyzeWithGemini(capturedImageBase64);
+      } catch (e) {
+        console.error(e);
+        msg.textContent = '⚠️ Lỗi kết nối Gemini. Đang hiển thị gợi ý mặc định...';
+        setTimeout(() => { closeScan(); showMockAiResult(); }, 1500);
+      }
+    }
+
+    async function analyzeWithGemini(imageBase64) {
+      const products = JSON.parse(localStorage.getItem('cellvany_products') || '[]');
+      const productList = products.map(p => `ID:${p.id} | ${p.name} | ${p.category} | Tags:${(p.tags || []).join(',')}`).join('\n');
+
+      const prompt = `Bạn là chuyên gia da liễu và tư vấn mỹ phẩm thuần chay của thương hiệu CellVany.
+Hãy phân tích ảnh khuôn mặt này và:
+1. Xác định loại da (khô, dầu, hỗn hợp, nhạy cảm, thường)
+2. Nhận xét ngắn về tình trạng da (1-2 câu)
+3. Gợi ý tối đa 3 sản phẩm phù hợp nhất từ danh sách sau
+
+Danh sách sản phẩm:
+${productList}
+
+Trả về JSON theo format:
+{"skinType":"loại da","skinAnalysis":"nhận xét ngắn","recommendedIds":["id1","id2","id3"],"tip":"lời khuyên chăm sóc da ngắn"}`;
+
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${CONFIG.GEMINI_API_KEY}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [
+              { inline_data: { mime_type: 'image/jpeg', data: imageBase64 } },
+              { text: prompt }
+            ]
+          }]
+        })
+      });
+
+      if (!res.ok) throw new Error('Gemini API error: ' + res.status);
+      const data = await res.json();
+      let text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+      text = text.replace(/```json|```/g, '').trim();
+      const result = JSON.parse(text);
+
+      closeScan();
+      showAiResult(result);
+    }
+
+    function showAiResult(result) {
+      const { skinType, skinAnalysis, recommendedIds, tip } = result;
+      const products = JSON.parse(localStorage.getItem('cellvany_products') || '[]');
+      const recommended = products.filter(p => recommendedIds.includes(p.id));
+      aiRecommendedIds = recommendedIds;
+
+      document.getElementById('ai-analysis-text').innerHTML = `
+    <strong>Loại da:</strong> ${skinType}<br><br>
+    <strong>Phân tích:</strong> ${skinAnalysis}<br><br>
+    <strong>Lời khuyên:</strong> ${tip}`;
+
+      const container = document.getElementById('ai-modal-products');
+      container.innerHTML = recommended.map(p => productCardHTML(p)).join('');
+
+      document.getElementById('ai-modal').classList.add('open');
+
+      // Cũng hiện trên homepage
+      const recoSection = document.getElementById('ai-reco-section');
+      document.getElementById('ai-reco-text').textContent = `Dựa trên phân tích làn da ${skinType} của bạn:`;
+      const recoGrid = document.getElementById('ai-reco-products');
+      recoGrid.innerHTML = recommended.map(p => productCardHTML(p)).join('');
+      recoSection.classList.add('show');
+    }
+
+    function showMockAiResult() {
+      showAiResult({
+        skinType: 'da hỗn hợp',
+        skinAnalysis: 'Làn da của bạn có vùng T dầu nhưng má khô. Cần cân bằng độ ẩm và kiểm soát bã nhờn.',
+        recommendedIds: ['1', '4', '3'],
+        tip: 'Dùng toner không cồn sáng tối, serum Vitamin C buổi sáng, và kem dưỡng ẩm nhẹ buổi tối.'
+      });
+    }
+
+    function closeAiModal() {
+      document.getElementById('ai-modal').classList.remove('open');
+      navigate('home');
+      renderProducts(allProducts);
+    }
+
+    function closeScan() {
+      if (cameraStream) { cameraStream.getTracks().forEach(t => t.stop()); cameraStream = null; }
+      document.getElementById('face-scan-overlay').style.display = 'none';
+      document.getElementById('navbar').style.display = 'flex';
+      navigate('home');
+      renderProducts(allProducts);
+    }
+
+    // ============================================================
+    // TOAST
+    // ============================================================
+    function showToast(msg) {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => toast.remove(), 3500);
+    }
+  </script>
+</body>
+
+</html>
